@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log($"남은 아이템 개수: {itemCount}");
+                Debug.Log($"남은 아이템 개수: {itemCount}개");
             }
         }
     }

@@ -5,6 +5,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// 따라갈 대상.
     /// </summary>
+    [Header("Settings")]
     [Tooltip("따라갈 대상.")]
     [SerializeField] 
     private Transform target;
@@ -12,6 +13,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// 카메라와 대상 사이의 오프셋.
     /// </summary>
+    [Space(5.0f)]
     [Tooltip("카메라와 대상 사이의 오프셋.")]
     [SerializeField] 
     private Vector3 offset;

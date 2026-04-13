@@ -33,6 +33,9 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = rb ?? GetComponent<Rigidbody>();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()
@@ -81,6 +84,8 @@ public class PlayerController : MonoBehaviour
     private void Rotate()
     {
         float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
         transform.Rotate(Vector3.up, mouseX * sensitivity);
+        transform.Rotate(Vector3.right, mouseY * sensitivity);
     }
 }

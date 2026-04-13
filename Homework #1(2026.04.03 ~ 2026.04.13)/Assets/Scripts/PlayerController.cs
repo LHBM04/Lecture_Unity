@@ -57,6 +57,28 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed;
 
     /// <summary>
+    /// 해당 플레이어의 점프 힘.
+    /// </summary>
+    [Tooltip("해당 플레이어의 점프 힘.")]
+    [SerializeField]
+    private float jumpForce;
+
+    /// <summary>
+    /// 해당 플레이어의 회전 민감도.
+    /// </summary>
+    [Header("Other Settings")]
+    [Tooltip("해당 플레이어의 회전 민감도.")]
+    [SerializeField]
+    private float sensitivity;
+
+    /// <summary>
+    /// 해당 플레이어의 바닥 체크 거리.
+    /// </summary>
+    [Tooltip("해당 플레이어의 바닥 체크 거리.")]
+    [SerializeField]
+    private float groundCheckDistance;
+
+    /// <summary>
     /// 해당 플레이어가 땅 위에 있는가에 대한 여부.
     /// </summary>
     public bool IsGrounded
@@ -67,25 +89,6 @@ public class PlayerController : MonoBehaviour
             return Physics.Raycast(origin, Vector3.down, groundCheckDistance);
         }
     }
-
-    [Tooltip("점프 힘.")]
-    [SerializeField]
-    private float jumpForce;
-
-    /// <summary>
-    /// 회전 민감도.
-    /// </summary>
-    [Header("Other Settings")]
-    [Tooltip("회전 민감도.")]
-    [SerializeField]
-    private float sensitivity;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [Tooltip("바닥 체크 거리.")]
-    [SerializeField]
-    private float groundCheckDistance;
 
     private void Reset()
     {
@@ -158,6 +161,6 @@ public class PlayerController : MonoBehaviour
     private void Rotate()
     {
         float mouseX = Input.GetAxisRaw(mouseXAxis);
-        transform.Rotate(Vector3.up, mouseX * sensitivity, Space.Self);
+        transform.Rotate(Vector3.up, mouseX * sensitivity * Time.deltaTime, Space.Self);
     }
 }

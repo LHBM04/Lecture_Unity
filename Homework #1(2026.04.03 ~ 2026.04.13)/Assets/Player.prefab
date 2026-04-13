@@ -82,7 +82,7 @@ MonoBehaviour:
   mouseXAxis: Mouse X
   moveSpeed: 5
   jumpForce: 5
-  sensitivity: 2
+  sensitivity: 75
   groundCheckDistance: 1.2
 --- !u!65 &3993578362520944232
 BoxCollider:

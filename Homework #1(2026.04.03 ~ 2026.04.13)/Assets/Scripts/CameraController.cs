@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 카메라의 이동을 구현합니다.
+/// </summary>
 public class CameraController : MonoBehaviour
 {
     /// <summary>
     /// 해당 카메라가 따라갈 대상.
     /// </summary>
-    [Header("Settings")]
+    [Header("Status")]
     [Tooltip("해당 카메라가 따라갈 대상.")]
     [SerializeField] 
     private Transform target;

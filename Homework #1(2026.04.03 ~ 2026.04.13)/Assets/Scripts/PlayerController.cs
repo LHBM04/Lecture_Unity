@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 플레이어의 이동을 구현합니다.
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
     /// <summary>

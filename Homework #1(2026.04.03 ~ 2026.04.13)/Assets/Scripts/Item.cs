@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 아이템을 구현합니다.
+/// </summary>
 public class Item : MonoBehaviour
 {
     /// <summary>

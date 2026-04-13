@@ -34,16 +34,17 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 해당 게임의 종료 키 이름.
-    /// </summary>
-    [SerializeField]
-    private string quitAxis;
-
-    /// <summary>
     /// 해당 게임의 일시 정지 키 이름.
     /// </summary>
     [SerializeField]
     private string pauseAxis;
+
+    /// <summary>
+    /// 해당 게임의 종료 키 이름.
+    /// </summary>
+    [Space(5.0f)]
+    [SerializeField]
+    private string quitAxis;
 
     /// <summary>
     /// 해당 게임의 일시 정지 여부.

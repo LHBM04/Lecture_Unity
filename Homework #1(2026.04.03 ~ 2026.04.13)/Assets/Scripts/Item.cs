@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Item : MonoBehaviour
 {
     /// <summary>
-    /// °ÔÀÓ ¸Å´ÏÀú.
+    /// ê²Œì„ ë§¤ë‹ˆì €.
     /// </summary>
-    [Tooltip("°ÔÀÓ ¸Å´ÏÀú.")]
+    [Tooltip("ê²Œì„ ë§¤ë‹ˆì €.")]
     [SerializeField]
     private GameManager manager;
 

@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 플레이어의 이동을 구현합니다.
+/// 플레이어 입력을 이동 시뮬레이션 값으로 변환합니다.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(PlayerController))]
 public class PlayerMovement : MonoBehaviour
 {
     /// <summary>
-    /// 해당 플레이어의 Rigidbody.
+    /// 해당 플레이어의 컨트롤러.
     /// </summary>
-    [Tooltip("해당 플레이어의 Rigidbody.")]
-    [SerializeField]
-    private Rigidbody rb;
+    [HideInInspector]
+    public PlayerController controller;
 
     /// <summary>
     /// 해당 플레이어의 상하 이동 키 이름.
@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// 해당 플레이어의 좌우 이동 키 이름.
     /// </summary>
-    [Tooltip("해당 카메라의 좌우 이동 키 이름.")]
+    [Tooltip("해당 플레이어의 좌우 이동 키 이름.")]
     [SerializeField]
     private string horizontalAxis;
 
@@ -43,9 +43,9 @@ public class PlayerMovement : MonoBehaviour
     private string jumpAxis;
 
     /// <summary>
-    /// 해당 플레이어의 좌우 이동 키 이름.
+    /// 해당 플레이어의 좌우 회전 입력 축 이름.
     /// </summary>
-    [Tooltip("해당 카메라의 좌우 이동 키 이름.")]
+    [Tooltip("해당 플레이어의 좌우 회전 입력 축 이름.")]
     [SerializeField]
     private string mouseXAxis;
 
@@ -64,43 +64,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float jumpForce;
 
-    private float velocity;
-
-    /// <summary>
-    /// 해당 플레이어의 회전 민감도.
-    /// </summary>
-    [Header("Other Settings")]
-    [Tooltip("해당 플레이어의 회전 민감도.")]
-    [SerializeField]
-    private float sensitivity;
-
-    /// <summary>
-    /// 해당 플레이어의 바닥 체크 거리.
-    /// </summary>
-    [Tooltip("해당 플레이어의 바닥 체크 거리.")]
-    [SerializeField]
-    private float groundCheckDistance;
-
-    /// <summary>
-    /// 해당 플레이어가 땅 위에 있는가에 대한 여부.
-    /// </summary>
-    public bool IsGrounded
-    {
-        get
-        {
-            Vector3 origin = transform.position + Vector3.up * 0.1f;
-            return Physics.Raycast(origin, Vector3.down, groundCheckDistance);
-        }
-    }
-
-    /// <summary>
-    /// 해당 플레이어의 애니메이터.
-    /// </summary>
-    [Header("Animations")]
-    [Tooltip("해당 플레이어의 애니메이터.")]
-    [SerializeField]
-    private Animator animator;
-
     /// <summary>
     /// 해당 플레이어의 속도에 따른 애니메이션 Float 파라미터 이름.
     /// </summary>
@@ -110,16 +73,16 @@ public class PlayerMovement : MonoBehaviour
     private int speedFloatHash;
 
     /// <summary>
-    /// 해당 플레이어의 속도에 따른 애니메이션 Float 파라미터 이름.
+    /// 해당 플레이어의 접지 여부에 따른 애니메이션 Bool 파라미터 이름.
     /// </summary>
-    [Tooltip("해당 플레이어의 속도에 따른 애니메이션 Float 파라미터 이름.")]
+    [Tooltip("해당 플레이어의 접지 여부에 따른 애니메이션 Bool 파라미터 이름.")]
     [SerializeField]
     private string groundedBool;
     private int groundedBoolHash;
 
     private void Reset()
     {
-        rb = GetComponent<Rigidbody>();
+        controller = GetComponent<PlayerController>();
 
         verticalAxis = "Vertical";
         horizontalAxis = "Horizontal";
@@ -129,19 +92,13 @@ public class PlayerMovement : MonoBehaviour
 
         moveSpeed = 5.0f;
         jumpForce = 5f;
-        
-        sensitivity = 2f;
-        groundCheckDistance = 1.2f;
-
-        animator = GetComponent<Animator>();
     }
 
     private void Awake()
     {
-        rb = rb ?? GetComponent<Rigidbody>();
+        controller = controller ?? GetComponent<PlayerController>();
 
-        animator = animator ?? GetComponent<Animator>();
-        if (animator)
+        if (controller && controller.Animator)
         {
             speedFloatHash = !string.IsNullOrEmpty(speedFloat) ? Animator.StringToHash(speedFloat) : 0;
             groundedBoolHash = !string.IsNullOrEmpty(groundedBool) ? Animator.StringToHash(groundedBool) : 0;
@@ -158,43 +115,26 @@ public class PlayerMovement : MonoBehaviour
         Rotate();
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        Vector3 origin = transform.position + Vector3.up * 0.1f;
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(origin, origin + Vector3.down * groundCheckDistance);
-    }
-#endif
-
     /// <summary>
-    /// 플레이어의 이동을 구현합니다.
+    /// 플레이어의 이동 입력을 속도로 변환합니다.
     /// </summary>
     private void Move()
     {
         float horizontal = Input.GetAxisRaw(horizontalAxis);
         float vertical = Input.GetAxisRaw(verticalAxis);
+        Vector3 inputDirection = new Vector3(horizontal, 0f, vertical);
 
-        if (horizontal <= 0f && vertical <= 0f)
+        float targetSpeed = Input.GetButton(runAxis) ? moveSpeed * 1.5f : moveSpeed;
+        Vector3 velocity = Vector3.ClampMagnitude(inputDirection, 1f) * targetSpeed;
+
+        if (controller)
         {
-            if (animator && speedFloatHash != 0)
-            {
-                animator.Update(0.0f);
-                animator.SetFloat(speedFloatHash, 0f);
-            }
+            controller.Velocity = velocity;
         }
-        else
+
+        if (controller && controller.Animator && speedFloatHash != 0)
         {
-            float moveSpeed = Input.GetButton(runAxis) ? this.moveSpeed * 1.5f : this.moveSpeed;
-
-            Vector3 movement = new Vector3(horizontal, 0f, vertical) * Time.deltaTime * moveSpeed;
-            transform.Translate(movement, Space.Self);
-
-            if (animator && speedFloatHash != 0)
-            {
-                animator.Update(0.0f);
-                animator.SetFloat(speedFloatHash, moveSpeed);
-            }
+            controller.Animator.SetFloat(speedFloatHash, velocity.magnitude);
         }
     }
 
@@ -205,31 +145,34 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetButtonDown(jumpAxis))
         {
-            if (!rb)
+            if (!controller || !controller.Rigidbody)
             {
-                Debug.LogWarning("PlayerController: Rigidbody를 찾을 수 없습니다!");
+                Debug.LogWarning("PlayerMovement: Rigidbody를 찾을 수 없습니다!");
                 return;
             }
 
-            if (IsGrounded)
+            if (controller.IsGrounded)
             {
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                controller.Rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             }
         }
 
-        if (animator && groundedBoolHash != 0)
+        if (controller && controller.Animator && groundedBoolHash != 0)
         {
-            animator.Update(0.0f);
-            animator.SetBool(groundedBoolHash, IsGrounded);
+            controller.Animator.SetBool(groundedBoolHash, controller.IsGrounded);
         }
     }
 
     /// <summary>
-    /// 플레이어의 좌우 회전을 구현합니다.
+    /// 플레이어의 좌우 회전 입력을 컨트롤러에 전달합니다.
     /// </summary>
     private void Rotate()
     {
         float mouseX = Input.GetAxisRaw(mouseXAxis);
-        transform.Rotate(Vector3.up, mouseX * sensitivity * Time.deltaTime, Space.Self);
+
+        if (controller)
+        {
+            controller.SetRotationSimulation(mouseX);
+        }
     }
 }

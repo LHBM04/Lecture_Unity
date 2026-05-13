@@ -905,6 +905,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8788390891546732453}
+  - component: {fileID: 4738726270743748588}
   - component: {fileID: 4640042040960594670}
   - component: {fileID: 3961046083274308056}
   - component: {fileID: 8784410039780467058}
@@ -931,6 +932,21 @@ Transform:
   - {fileID: 6816101571523519509}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4738726270743748588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8235111471439797336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52766fd0d76efca408ffc88abf4537db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  rb: {fileID: 3961046083274308056}
+  sensitivity: 50
+  groundCheckDistance: 0.85
 --- !u!114 &4640042040960594670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -943,6 +959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 100066017f4a3754e98e72e687dc1bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  controller: {fileID: 0}
   rb: {fileID: 3961046083274308056}
   verticalAxis: Vertical
   horizontalAxis: Horizontal
@@ -951,8 +968,6 @@ MonoBehaviour:
   mouseXAxis: Mouse X
   moveSpeed: 10
   jumpForce: 7.5
-  sensitivity: 50
-  groundCheckDistance: 0.85
   animator: {fileID: 6425295257814018541}
   speedFloat: Speed
   groundedBool: Grounded

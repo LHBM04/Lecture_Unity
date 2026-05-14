@@ -906,6 +906,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8788390891546732453}
   - component: {fileID: 3004784208929689070}
+  - component: {fileID: 6522577990128878165}
   - component: {fileID: 2187723316245613438}
   - component: {fileID: 3961046083274308056}
   - component: {fileID: 8784410039780467058}
@@ -947,7 +948,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   rb: {fileID: 3961046083274308056}
   animator: {fileID: 6425295257814018541}
+  groundedBool: Grounded
   groundCheckDistance: 0.85
+--- !u!114 &6522577990128878165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8235111471439797336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d92887e2a2ffdef47a1f73295a5dcb2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  moveInput: {fileID: -3073392295908056054, guid: 50b8269fd7644cb41a05d476b2f0d646, type: 3}
+  runInput: {fileID: 0}
+  jumpInput: {fileID: 2319422238532009645, guid: 50b8269fd7644cb41a05d476b2f0d646, type: 3}
+  lookInput: {fileID: -226930095009206103, guid: 50b8269fd7644cb41a05d476b2f0d646, type: 3}
+  dodgeInput: {fileID: 0}
+  moveSpeed: 5
+  runMultiplier: 1.5
+  dodgeMultiplier: 2
+  jumpForce: 5
+  lookSensitivity: 2
+  walkBool: Walk
+  runBool: Run
+  dodgeBool: 
 --- !u!114 &2187723316245613438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1103,11 +1130,11 @@ MonoBehaviour:
     m_ActionName: 'Player/Look[/Mouse/delta]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 848d6f3b-1991-435c-a528-f02b53a77634
+    m_ActionId: 0dc4e4d9-6925-49b7-a2ba-0e1a203ea155
     m_ActionName: 'System/Pause[/Keyboard/enter]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: e9013620-bef6-4a0d-9cd5-09c0015a36ca
+    m_ActionId: 1b8142c8-bdd3-4962-800f-7a88d69ed2e3
     m_ActionName: 'System/Quit[/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Desktop

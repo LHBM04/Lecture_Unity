@@ -4,8 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Bullet
+  - Enemy
   - Harmful
-  - Lethal
   layers:
   - Default
   - TransparentFX

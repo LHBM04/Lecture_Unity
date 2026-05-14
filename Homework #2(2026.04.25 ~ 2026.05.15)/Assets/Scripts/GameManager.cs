@@ -1,120 +1,123 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// 게임 내 흐름을 제어합니다.
-/// </summary>
-public class GameManager : MonoBehaviour
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+public sealed class GameManager : MonoBehaviour
 {
-    private int itemCount;
-    public int ItemCount
+    private int _itemCount;
+
+    public int itemCount
     {
-        get 
-        { 
-            return itemCount; 
+        get
+        {
+            return _itemCount;
         }
         set
         {
-            if ((itemCount = value) <= 0)
-            {
+            _itemCount = value;
+
 #if UNITY_EDITOR
-                Debug.Log("축하합니다! 모든 아이템을 모았습니다!");
+            Debug.Log(_itemCount <= 0
+                ? "축하합니다! 모든 아이템을 모았습니다!"
+                : $"남은 아이템 개수: {_itemCount}개");
 #endif
-            }
-            else
-            {
-#if UNITY_EDITOR
-                Debug.Log($"남은 아이템 개수: {itemCount}개");
-#endif
-            }
         }
     }
 
-    [SerializeField]
-    private InputActionReference pauseAction;
+    private bool _isPaused;
 
     [SerializeField]
-    private InputActionReference quitAction;
+    private float _quitHoldTime = 1.0f;
 
-    private bool isPaused;
-
-    [SerializeField]
-    private float quitTime;
-    private float quitTimer;
+    private float _quitTimer;
+    private bool _isQuitPressed;
 
     private void Reset()
     {
-        quitTime = 1.0f;
+        _quitHoldTime = 1.0f;
     }
 
     private void Awake()
     {
-        itemCount = FindObjectsByType<Item>(FindObjectsSortMode.None).Length;
+        _itemCount = FindObjectsByType<Item>(FindObjectsSortMode.None).Length;
+        _quitTimer = _quitHoldTime;
+
 #if UNITY_EDITOR
-        Debug.Log($"감지한 아이템 개수: {itemCount}개");
+        Debug.Log($"감지한 아이템 개수: {_itemCount}개");
 #endif
-
-        quitTimer = quitTime;
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        pauseAction.action.performed += OnPause;
-        pauseAction.action.Enable();
-
-        quitAction.action.performed += OnQuit;
-        quitAction.action.Enable();
+        HandleQuitHold();
     }
 
-    private void OnDisable()
+    public void OnPause(InputAction.CallbackContext context)
     {
-        pauseAction.action.performed -= OnPause;
-        pauseAction.action.Disable();
-
-        quitAction.action.performed -= OnQuit;
-        quitAction.action.Disable();
-    }
-
-    private void OnPause(InputAction.CallbackContext context)
-    {
-        isPaused = !isPaused;
-
-        if (isPaused)
+        if (!context.performed)
         {
-            Time.timeScale = 0f;
-
-#if UNITY_EDITOR
-            Debug.Log("게임이 일시정지되었습니다.");
-#endif
+            return;
         }
-        else
-        {
-            Time.timeScale = 1f;
 
-#if UNITY_EDITOR
-            Debug.Log("게임이 재개되었습니다.");
-#endif
+        SetPaused(!_isPaused);
+    }
+
+    public void OnQuit(InputAction.CallbackContext context)
+    {
+        if (context.started || context.performed)
+        {
+            _isQuitPressed = true;
+        }
+        else if (context.canceled)
+        {
+            _isQuitPressed = false;
+            _quitTimer = _quitHoldTime;
         }
     }
 
-    private void OnQuit(InputAction.CallbackContext context)
+    private void HandleQuitHold()
     {
-        if (context.performed || context.started)
+        if (!_isQuitPressed)
         {
-            if ((quitTimer -= Time.deltaTime) <= 0f)
-            {
+            return;
+        }
+
+        if ((_quitTimer -= Time.unscaledDeltaTime) > 0.0f)
+        {
+            return;
+        }
+
+        QuitGame();
+
+        _isQuitPressed = false;
+        _quitTimer = _quitHoldTime;
+    }
+
+    private void SetPaused(bool paused)
+    {
+        _isPaused = paused;
+        Time.timeScale = _isPaused ? 0.0f : 1.0f;
+
 #if UNITY_EDITOR
-                Debug.Log("게임을 종료합니다.");
-                EditorApplication.isPlaying = false;
+        Debug.Log(_isPaused ? "게임이 일시정지되었습니다." : "게임이 재개되었습니다.");
+#endif
+    }
+
+    private void QuitGame()
+    {
+#if UNITY_EDITOR
+        Debug.Log("게임을 종료합니다.");
+        EditorApplication.isPlaying = false;
 #else
-                Application.Quit();
+        Application.Quit();
 #endif
-            }
-        }
-        else
-        {
-            quitTimer = quitTime;
-        }
+    }
+
+    private void OnDestroy()
+    {
+        Time.timeScale = 1.0f;
     }
 }

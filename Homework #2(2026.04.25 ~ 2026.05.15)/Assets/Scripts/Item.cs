@@ -5,7 +5,8 @@
 /// </summary>
 public class Item : MonoBehaviour
 {
-    private GameManager manager;
+    private GameManager _manager;
+    private bool _isCollected;
 
     [SerializeField]
     private string playerTag;
@@ -17,7 +18,7 @@ public class Item : MonoBehaviour
 
     private void Awake()
     {
-        manager = FindFirstObjectByType<GameManager>();
+        _manager = FindFirstObjectByType<GameManager>();
 
         if (string.IsNullOrEmpty(playerTag))
         {
@@ -29,10 +30,18 @@ public class Item : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(playerTag))
+        if (_isCollected || string.IsNullOrEmpty(playerTag) || !other.CompareTag(playerTag))
         {
-            manager.ItemCount--;
-            gameObject.SetActive(false);
+            return;
         }
+
+        _isCollected = true;
+
+        if (_manager != null)
+        {
+            --_manager.itemCount;
+        }
+
+        gameObject.SetActive(false);
     }
 }

@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c9b4880addee1e458a4422ca4a719b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  manager: {fileID: 0}
+  playerTag: Player
 --- !u!1 &7656544547163985508
 GameObject:
   m_ObjectHideFlags: 0

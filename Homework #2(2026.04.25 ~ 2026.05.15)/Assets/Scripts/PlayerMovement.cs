@@ -1,85 +1,261 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// 플레이어 입력을 이동 시뮬레이션 값으로 변환합니다.
-/// </summary>
-[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerController))]
-public class PlayerMovement : MonoBehaviour
+public sealed class PlayerMovement : MonoBehaviour
 {
-    /// <summary>
-    /// 해당 플레이어의 컨트롤러.
-    /// </summary>
-    [HideInInspector]
-    public PlayerController controller;
+    private PlayerController controller;
+
+    [Header("Inputs")]
+    [SerializeField] 
+    private InputActionReference moveInput;
+
+    [SerializeField] 
+    private InputActionReference runInput;
+
+    [SerializeField] 
+    private InputActionReference jumpInput;
+
+    [SerializeField] 
+    private InputActionReference lookInput;
+
+    [SerializeField] 
+    private InputActionReference dodgeInput;
+
+    [Header("Movement")]
+    [SerializeField] 
+    private float moveSpeed = 5.0f;
+
+    [SerializeField] 
+    private float runMultiplier = 1.5f;
+
+    [SerializeField]
+    private float dodgeMultiplier = 2.0f;
+
+    private Vector2 moveValue;
+    private bool shouldRun;
+    private bool shouldDodge;
+
+    [Space, SerializeField] private float jumpForce = 5.0f;
+    private bool shouldJump;
+
+    [Space, SerializeField] private float lookSensitivity = 100.0f;
+    private Vector2 lookValue;
 
     private Animator animator;
 
-    /// <summary>
-    /// 해당 플레이어의 이동 속도.
-    /// </summary>
-    [Header("Status")]
-    [Tooltip("해당 플레이어의 이동 속도.")]
-    [SerializeField]
-    private float moveSpeed;
+    [Header("Animation")]
+    [SerializeField] 
+    private string walkBool = "Walk";
+    private int walkBoolHash;
 
-    /// <summary>
-    /// 해당 플레이어의 점프 힘.
-    /// </summary>
-    [Tooltip("해당 플레이어의 점프 힘.")]
-    [SerializeField]
-    private float jumpForce;
+    [SerializeField] 
+    private string runBool = "Run";
+    private int runBoolHash;
 
-    /// <summary>
-    /// 해당 플레이어의 속도에 따른 애니메이션 Float 파라미터 이름.
-    /// </summary>
-    [Tooltip("해당 플레이어의 속도에 따른 애니메이션 Float 파라미터 이름.")]
-    [SerializeField]
-    private string speedFloat;
-    private int speedFloatHash;
-
-    /// <summary>
-    /// 해당 플레이어의 접지 여부에 따른 애니메이션 Bool 파라미터 이름.
-    /// </summary>
-    [Tooltip("해당 플레이어의 접지 여부에 따른 애니메이션 Bool 파라미터 이름.")]
-    [SerializeField]
-    private string groundedBool;
-    private int groundedBoolHash;
-
-    private void Reset()
-    {
-        controller = GetComponent<PlayerController>();
-        animator = controller.Animator;
-
-        moveSpeed = 5.0f;
-        jumpForce = 5f;
-    }
+    [SerializeField] 
+    private string dodgeBool = "Dodge";
+    private int dodgeBoolHash;
 
     private void Awake()
     {
-        controller = controller ?? GetComponent<PlayerController>();
-        animator = animator ?? controller.Animator;
-        speedFloatHash = !string.IsNullOrEmpty(speedFloat) ? Animator.StringToHash(speedFloat) : 0;
-        groundedBoolHash = !string.IsNullOrEmpty(groundedBool) ? Animator.StringToHash(groundedBool) : 0;
+        controller = GetComponent<PlayerController>();
+
+        if (!controller)
+        {
+#if UNITY_EDITOR
+            Debug.LogError($"{nameof(PlayerController)}를 찾을 수 없습니다.", this);
+#endif
+            enabled = false;
+            return;
+        }
+
+        animator = controller.Animator;
+
+        if (animator)
+        {
+            walkBoolHash = string.IsNullOrWhiteSpace(walkBool) ? 0 : Animator.StringToHash(walkBool);
+            runBoolHash = string.IsNullOrWhiteSpace(runBool) ? 0 : Animator.StringToHash(runBool);
+            dodgeBoolHash = string.IsNullOrWhiteSpace(dodgeBool) ? 0 : Animator.StringToHash(dodgeBool);
+        }
     }
 
-    public void OnMove(InputValue value)
+    private void OnEnable()
     {
-        Vector2 input = value.Get<Vector2>();
-        controller.Velocity += new Vector3(input.x, 0.0f, input.y) * moveSpeed;
+        if (moveInput)
+        {
+            moveInput.action.performed += OnMovePerformed;
+            moveInput.action.canceled += OnMoveCanceled;
+            moveInput.action.Enable();
+        }
+
+        if (runInput)
+        {
+            runInput.action.performed += OnRunPerformed;
+            runInput.action.canceled += OnRunCanceled;
+            runInput.action.Enable();
+        }
+
+        if (jumpInput)
+        {
+            jumpInput.action.performed += OnJumpPerformed;
+            jumpInput.action.Enable();
+        }
+
+        if (lookInput)
+        {
+            lookInput.action.performed += OnLookPerformed;
+            lookInput.action.canceled += OnLookCanceled;
+            lookInput.action.Enable();
+        }
+
+        if (dodgeInput)
+        {
+            dodgeInput.action.performed += OnDodgePerformed;
+            dodgeInput.action.Enable();
+        }
     }
 
-    public void OnJump(InputValue value)
+    private void OnDisable()
     {
-        if (!controller.IsGrounded)
+        if (moveInput)
+        {
+            moveInput.action.performed -= OnMovePerformed;
+            moveInput.action.canceled -= OnMoveCanceled;
+            moveInput.action.Disable();
+        }
+
+        if (runInput)
+        {
+            runInput.action.performed -= OnRunPerformed;
+            runInput.action.canceled -= OnRunCanceled;
+            runInput.action.Disable();
+        }
+
+        if (jumpInput)
+        {
+            jumpInput.action.performed -= OnJumpPerformed;
+            jumpInput.action.Disable();
+        }
+
+        if (lookInput)
+        {
+            lookInput.action.performed -= OnLookPerformed;
+            lookInput.action.canceled -= OnLookCanceled;
+            lookInput.action.Disable();
+        }
+
+        if (dodgeInput)
+        {
+            dodgeInput.action.performed -= OnDodgePerformed;
+            dodgeInput.action.Disable();
+        }
+    }
+
+    private void Update()
+    {
+        HandleRotation();
+        HandleAnimation();
+    }
+
+    private void FixedUpdate()
+    {
+        HandleVelocity();
+        shouldJump = false;
+    }
+
+    private void OnMovePerformed(InputAction.CallbackContext context)
+    {
+        moveValue = context.ReadValue<Vector2>();
+    }
+
+    private void OnMoveCanceled(InputAction.CallbackContext context)
+    {
+        moveValue = Vector2.zero;
+    }
+
+    private void OnRunPerformed(InputAction.CallbackContext context)
+    {
+        shouldRun = true;
+    }
+
+    private void OnRunCanceled(InputAction.CallbackContext context)
+    {
+        shouldRun = false;
+    }
+
+    private void OnJumpPerformed(InputAction.CallbackContext context)
+    {
+        if (controller.IsGrounded)
+        {
+            shouldJump = true;
+        }
+    }
+
+    private void OnLookPerformed(InputAction.CallbackContext context)
+    {
+        lookValue = context.ReadValue<Vector2>();
+    }
+
+    private void OnLookCanceled(InputAction.CallbackContext context)
+    {
+        lookValue = Vector2.zero;
+    }
+
+    private void OnDodgePerformed(InputAction.CallbackContext context)
+    {
+    }
+
+    private void HandleVelocity()
+    {
+        if (shouldDodge)
+        {
+        }
+        else
+        {
+
+        }
+        float totalSpeed = shouldRun
+            ? moveSpeed * runMultiplier
+            : moveSpeed;
+
+        Vector3 localMove = new Vector3(moveValue.x, 0.0f, moveValue.y);
+        localMove = Vector3.ClampMagnitude(localMove, 1.0f);
+
+        Vector3 velocity = transform.TransformDirection(localMove) * totalSpeed;
+
+        velocity.y = controller.Velocity.y;
+
+        if (controller.IsGrounded && shouldJump)
+        {
+            velocity.y = jumpForce;
+        }
+
+        controller.Velocity = velocity;
+    }
+
+    private void HandleRotation()
+    {
+        Vector3 rotation = transform.eulerAngles;
+        rotation.y += lookValue.x * lookSensitivity * Time.deltaTime;
+        transform.rotation = Quaternion.Euler(rotation);
+    }
+
+    private void HandleAnimation()
+    {
+        if (!animator)
         {
             return;
         }
 
-        if (value.isPressed)
+        if (walkBoolHash != 0)
         {
-            controller.Velocity += Vector3.up * jumpForce;
+            animator.SetBool(walkBoolHash, moveValue.sqrMagnitude > 0.0f);
+        }
+
+        if (runBoolHash != 0)
+        {
+            animator.SetBool(runBoolHash, shouldRun && moveValue.sqrMagnitude > 0.0f);
         }
     }
 }

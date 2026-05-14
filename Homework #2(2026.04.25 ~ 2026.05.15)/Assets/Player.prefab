@@ -786,7 +786,7 @@ Animator:
   m_GameObject: {fileID: 6576137053366831559}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 52aeef1f021dfe245aa10b57c44226e8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4d3596eca9edd5842a308c83616b26a8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -906,12 +906,13 @@ GameObject:
   m_Component:
   - component: {fileID: 8788390891546732453}
   - component: {fileID: 3004784208929689070}
-  - component: {fileID: 284684481343897415}
+  - component: {fileID: 2187723316245613438}
   - component: {fileID: 3961046083274308056}
   - component: {fileID: 8784410039780467058}
+  - component: {fileID: 4201000649609505596}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -946,9 +947,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   rb: {fileID: 3961046083274308056}
   animator: {fileID: 6425295257814018541}
-  sensitivity: 2
-  groundCheckDistance: 1.2
---- !u!114 &284684481343897415
+  groundCheckDistance: 0.85
+--- !u!114 &2187723316245613438
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -957,19 +957,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8235111471439797336}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d92887e2a2ffdef47a1f73295a5dcb2a, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d6643133db053c4eb90fa000e9c8f45, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  controller: {fileID: 3004784208929689070}
-  verticalAxis: Vertical
-  horizontalAxis: Horizontal
-  runAxis: Run
-  jumpAxis: Jump
-  mouseXAxis: Mouse X
-  moveSpeed: 5
-  jumpForce: 5
-  speedFloat: Speed
-  groundedBool: Grounded
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  harmfulTag: Harmful
+  lethalTag: Lethal
+  damageTrigger: Damage
+  deadTrigger: Dead
 --- !u!54 &3961046083274308056
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1018,6 +1012,108 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5, y: 4.5, z: 2.5}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &4201000649609505596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8235111471439797336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: 50b8269fd7644cb41a05d476b2f0d646, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 180d0658-832e-46d0-a848-dbab9745f291
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 721cb5c7-4826-496c-bc44-6e2bb03c2168
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnRun
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b72c5bfe-36e5-42a9-a7f4-2c5f13d5b0a9
+    m_ActionName: 'Player/Run[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnLook
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a02c4351-5813-4b37-a50a-421f2756787d
+    m_ActionName: 'Player/Look[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 848d6f3b-1991-435c-a528-f02b53a77634
+    m_ActionName: 'System/Pause[/Keyboard/enter]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e9013620-bef6-4a0d-9cd5-09c0015a36ca
+    m_ActionName: 'System/Quit[/Keyboard/escape]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Desktop
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &8416427203035413623
 GameObject:
   m_ObjectHideFlags: 0

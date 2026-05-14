@@ -5,26 +5,31 @@
 /// </summary>
 public class Item : MonoBehaviour
 {
-    /// <summary>
-    /// 게임 매니저.
-    /// </summary>
-    [Tooltip("게임 매니저.")]
-    [SerializeField]
     private GameManager manager;
+
+    [SerializeField]
+    private string playerTag;
 
     private void Reset()
     {
-        manager = FindFirstObjectByType<GameManager>();
+        playerTag = "Player";
     }
 
     private void Awake()
     {
-        manager = manager ?? FindFirstObjectByType<GameManager>();
+        manager = FindFirstObjectByType<GameManager>();
+
+        if (string.IsNullOrEmpty(playerTag))
+        {
+#if UNITY_EDITOR
+            Debug.LogWarning("Player Tag 필드가 할당되지 않았습니다!");
+#endif
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(playerTag))
         {
             manager.ItemCount--;
             gameObject.SetActive(false);

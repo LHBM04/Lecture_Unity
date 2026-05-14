@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3606130821037624523}
   - component: {fileID: 9054923888237552591}
   - component: {fileID: 3571467393322581360}
-  - component: {fileID: 687884291405822470}
   m_Layer: 0
   m_Name: Item
   m_TagString: Untagged
@@ -67,7 +66,7 @@ Animator:
   m_GameObject: {fileID: 454866813021370265}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cebd43246f98da649b3f1bf4fbc7be0c, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3735274897ee2e2469bbbd2a780b6e94, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -88,20 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 454866813021370265}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2558afda42038d740beb92df0f95e133, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Item
-  manager: {fileID: 0}
---- !u!114 &687884291405822470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 454866813021370265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2558afda42038d740beb92df0f95e133, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c9b4880addee1e458a4422ca4a719b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   manager: {fileID: 0}

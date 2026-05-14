@@ -905,8 +905,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8788390891546732453}
-  - component: {fileID: 4738726270743748588}
-  - component: {fileID: 4640042040960594670}
+  - component: {fileID: 3004784208929689070}
+  - component: {fileID: 284684481343897415}
   - component: {fileID: 3961046083274308056}
   - component: {fileID: 8784410039780467058}
   m_Layer: 0
@@ -932,7 +932,7 @@ Transform:
   - {fileID: 6816101571523519509}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4738726270743748588
+--- !u!114 &3004784208929689070
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -941,13 +941,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8235111471439797336}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52766fd0d76efca408ffc88abf4537db, type: 3}
+  m_Script: {fileID: 11500000, guid: ece01422bdb00234c9e73cc54d062511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   rb: {fileID: 3961046083274308056}
-  sensitivity: 50
-  groundCheckDistance: 0.85
---- !u!114 &4640042040960594670
+  animator: {fileID: 6425295257814018541}
+  sensitivity: 2
+  groundCheckDistance: 1.2
+--- !u!114 &284684481343897415
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -956,19 +957,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8235111471439797336}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 100066017f4a3754e98e72e687dc1bf2, type: 3}
+  m_Script: {fileID: 11500000, guid: d92887e2a2ffdef47a1f73295a5dcb2a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  controller: {fileID: 0}
-  rb: {fileID: 3961046083274308056}
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  controller: {fileID: 3004784208929689070}
   verticalAxis: Vertical
   horizontalAxis: Horizontal
   runAxis: Run
   jumpAxis: Jump
   mouseXAxis: Mouse X
-  moveSpeed: 10
-  jumpForce: 7.5
-  animator: {fileID: 6425295257814018541}
+  moveSpeed: 5
+  jumpForce: 5
   speedFloat: Speed
   groundedBool: Grounded
 --- !u!54 &3961046083274308056

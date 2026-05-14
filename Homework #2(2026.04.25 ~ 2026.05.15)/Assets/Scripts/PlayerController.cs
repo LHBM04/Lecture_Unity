@@ -13,14 +13,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     [Tooltip("해당 플레이어의 Rigidbody.")]
     [SerializeField]
-    private Rigidbody rb;
+    private Rigidbody _rigidbody;
+    public Rigidbody Rigidbody => _rigidbody;
 
     /// <summary>
     /// 해당 플레이어의 Animator.
     /// </summary>
     [Tooltip("해당 플레이어의 Animator.")]
     [SerializeField]
-    private Animator animator;
+    private Animator _animator;
+    public Animator Animator => _animator;
 
     /// <summary>
     /// 해당 플레이어의 회전 민감도.
@@ -45,16 +47,6 @@ public class PlayerController : MonoBehaviour
     public Vector3 Velocity { get; set; }
 
     /// <summary>
-    /// 플레이어 Rigidbody 접근자.
-    /// </summary>
-    public Rigidbody Rigidbody => rb;
-
-    /// <summary>
-    /// 플레이어 Animator 접근자.
-    /// </summary>
-    public Animator Animator => animator;
-
-    /// <summary>
     /// 해당 플레이어가 땅 위에 있는가에 대한 여부.
     /// </summary>
     public bool IsGrounded
@@ -68,8 +60,8 @@ public class PlayerController : MonoBehaviour
 
     private void Reset()
     {
-        rb = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
+        _rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
 
         sensitivity = DefaultSensitivity;
         groundCheckDistance = DefaultGroundCheckDistance;
@@ -80,8 +72,8 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        rb = rb ?? GetComponent<Rigidbody>();
-        animator = animator ?? GetComponent<Animator>();
+        _rigidbody = _rigidbody ?? GetComponent<Rigidbody>();
+        _animator = _animator ?? GetComponent<Animator>();
         sensitivity = sensitivity > 0f ? sensitivity : DefaultSensitivity;
         groundCheckDistance = groundCheckDistance > 0f ? groundCheckDistance : DefaultGroundCheckDistance;
 
@@ -94,44 +86,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
-        Rotate();
-    }
-
-    public void SetRotationSimulation(float rotation)
-    {
-        simulatedRotation = rotation;
-    }
-
-    /// <summary>
-    /// 플레이어의 이동을 구현합니다.
-    /// </summary>
-    private void Move()
-    {
-        Vector3 movement = transform.TransformDirection(Velocity) * Time.fixedDeltaTime;
-
-        if (rb)
-        {
-            rb.MovePosition(rb.position + movement);
-            return;
-        }
-
-        transform.position += movement;
-    }
-
-    /// <summary>
-    /// 플레이어의 좌우 회전을 구현합니다.
-    /// </summary>
-    private void Rotate()
-    {
-        float rotation = simulatedRotation * sensitivity * Time.fixedDeltaTime;
-
-        if (rb)
-        {
-            rb.MoveRotation(rb.rotation * Quaternion.Euler(0f, rotation, 0f));
-            return;
-        }
-
-        transform.Rotate(Vector3.up, rotation, Space.Self);
+        transform.Translate(Velocity * Time.fixedDeltaTime, Space.Self);
     }
 }

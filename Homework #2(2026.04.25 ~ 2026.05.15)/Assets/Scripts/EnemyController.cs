@@ -56,9 +56,9 @@ public sealed class EnemyController : MonoBehaviour
             _walkBoolHash = string.IsNullOrWhiteSpace(_walkBool)
                 ? 0
                 : Animator.StringToHash(_walkBool);
-            _deadTriggerHash = string.IsNullOrWhiteSpace(_deadTrigger)
+            _attackTriggerHash = string.IsNullOrWhiteSpace(_attackTrigger)
                 ? 0
-                : Animator.StringToHash(_deadTrigger);
+                : Animator.StringToHash(_attackTrigger);
             _deadTriggerHash = string.IsNullOrWhiteSpace(_deadTrigger)
                 ? 0
                 : Animator.StringToHash(_deadTrigger);

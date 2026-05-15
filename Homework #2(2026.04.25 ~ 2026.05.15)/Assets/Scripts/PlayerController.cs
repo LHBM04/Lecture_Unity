@@ -282,6 +282,11 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             _jumpRequested = true;
+
+            if (_groundedBoolHash != 0)
+            {
+                _animator.SetBool(_groundedBoolHash, false);
+            }
         }
     }
 

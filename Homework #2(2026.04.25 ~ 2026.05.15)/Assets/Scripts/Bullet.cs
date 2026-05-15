@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class BulletController : MonoBehaviour
+public class Bullet : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody _rigidbody;
@@ -31,6 +31,6 @@ public class BulletController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        DestroyImmediate(gameObject);
+        Destroy(gameObject);
     }
 }

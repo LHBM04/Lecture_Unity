@@ -14,7 +14,6 @@ public sealed class EnemySpawner : MonoBehaviour
 
     [SerializeField]
     private float spawnTime;
-
     private float spawnTimer;
 
     private void Reset()

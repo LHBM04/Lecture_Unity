@@ -134,7 +134,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8019862414519829217}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92c8919dfeb74aa429914ecfb0130709, type: 3}
+  m_Script: {fileID: 11500000, guid: edc55aaecb5e92c418f37627ccf0fe67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cartridge
   _lifeTime: 5

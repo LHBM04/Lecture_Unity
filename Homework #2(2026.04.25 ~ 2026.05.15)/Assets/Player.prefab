@@ -815,7 +815,7 @@ GameObject:
   - component: {fileID: 6425295257814018541}
   m_Layer: 0
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -848,7 +848,7 @@ Animator:
   m_GameObject: {fileID: 6576137053366831559}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4d3596eca9edd5842a308c83616b26a8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2e70973a675e9e04181c15835a7e3a7e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -968,10 +968,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8788390891546732453}
   - component: {fileID: 3004784208929689070}
+  - component: {fileID: 3780964579343537554}
   - component: {fileID: 3961046083274308056}
   - component: {fileID: 8784410039780467058}
   - component: {fileID: 4405221765237728807}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1018,9 +1019,9 @@ MonoBehaviour:
   _lookSensitivity: 0.12
   _moveRotationSpeed: 0
   _groundCheckDistance: 0.85
-  _bulletPrefab: {fileID: 8687621084049323187, guid: cd4bc25324d66bc43ac9acca871c1200, type: 3}
+  _bulletPrefab: {fileID: 8687621084049323187, guid: 8ca220b4f7ac41a41bcf347fbfecadf5, type: 3}
   _bulletPosition: {fileID: 3561662993491556338}
-  _cartridgePrefab: {fileID: 8019862414519829217, guid: f205772c3e5d9f242905d740d997f0a0, type: 3}
+  _cartridgePrefab: {fileID: 8019862414519829217, guid: c1fd1b44b341dd3499485f79c812e781, type: 3}
   _cartridgePosition: {fileID: 1360535967065634185}
   _animator: {fileID: 6425295257814018541}
   _walkBool: Walk
@@ -1029,6 +1030,24 @@ MonoBehaviour:
   _dodgeTrigger: Dodge
   _deadTrigger: Dead
   _fireTrigger: Fire
+--- !u!114 &3780964579343537554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8235111471439797336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0697ba4b7f193ca4a8162fcaeac7048c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  enemyPrefabs:
+  - {fileID: 6050394430080955009, guid: f9dd628ee2a45be40abb266f1531e058, type: 3}
+  - {fileID: 6823068232060498196, guid: 7f8f99f9867db2a46bd30cd227b38ad8, type: 3}
+  spawnRadius: 20
+  minSpawnDistance: 15
+  spawnTime: 4.5
 --- !u!54 &3961046083274308056
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1076,7 +1095,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 2.5, y: 4.5, z: 2.5}
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &4405221765237728807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1460,9 +1479,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7654581314051884477}
     m_Modifications:
+    - target: {fileID: 578974329431804512, guid: a2e051660762cbe4494c17a095a95e10, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1509416925549156319, guid: a2e051660762cbe4494c17a095a95e10, type: 3}
       propertyPath: m_Name
       value: Weapon HandGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 1509416925549156319, guid: a2e051660762cbe4494c17a095a95e10, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2285952976136801637, guid: a2e051660762cbe4494c17a095a95e10, type: 3}
       propertyPath: m_LocalScale.x

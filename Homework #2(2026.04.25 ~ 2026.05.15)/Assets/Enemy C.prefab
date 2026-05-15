@@ -110,7 +110,7 @@ Animator:
   m_GameObject: {fileID: 2026168945442122496}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b76ead6193657814aacfe09c7c8efedb, type: 2}
+  m_Controller: {fileID: 9100000, guid: 816a50ea550cbef4fb7aaf0becbf6062, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -717,22 +717,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 6823068232060498196}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86ccf3c6bc206c247861f93718ada5e5, type: 3}
+  m_Script: {fileID: 11500000, guid: b03d61c840092d54793516d05f36cdf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   _targetTag: Player
-  _detectRadius: 5
+  _detectRadius: 20
   _targetLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 8
   _moveSpeed: 3
   _rotateSpeed: 720
-  _targetReachDistance: 0.2
+  _targetReachDistance: 5
   _moveDuration: 2
   _waitDuration: 0.5
   _animator: {fileID: 7533226865379596945}
   _walkBool: Walk
-  _attackTrigger: 
+  _attackTrigger: Attack
   _deadTrigger: Dead
 --- !u!54 &8658459285233686094
 Rigidbody:

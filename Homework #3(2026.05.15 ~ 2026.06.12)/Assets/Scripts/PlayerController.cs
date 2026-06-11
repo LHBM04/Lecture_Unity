@@ -24,13 +24,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float rotateSpeed;
 
-    [SerializeField] 
+    [Space, SerializeField] 
     private Transform ballTransform;
 
-    [SerializeField] 
+    [Space, SerializeField]
     private float dribbleRange;
 
+    [SerializeField] 
+    private float dribbleTouchForce;
+
     [SerializeField]
+    private float dribbleForwardOffset;
+
+    [Space, SerializeField]
     private float kickForce;
 
     [SerializeField]
@@ -83,6 +89,9 @@ public class PlayerController : MonoBehaviour
         jogSpeed = 3.0f;
         sprintSpeed = 5.5f;
         rotateSpeed = 10.0f;
+
+        dribbleTouchForce = 3.0f;
+        dribbleForwardOffset = 0.5f;
 
         kickForce = 25.0f;
         upwardAngle = 0.3f;
@@ -201,6 +210,17 @@ public class PlayerController : MonoBehaviour
                 sprintAction.Disable();
                 kickAction.Enable();
                 break;
+        }
+    }
+
+    public void Dribble()
+    {
+        if (ballTransform != null && ballTransform.TryGetComponent(out Rigidbody ballRigidbody))
+        {
+            Vector3 dribbleDirection = (transform.forward + transform.up * 0.1f).normalized;
+
+            ballRigidbody.linearVelocity = Vector3.zero;
+            ballRigidbody.AddForce(dribbleDirection * dribbleTouchForce, ForceMode.Impulse);
         }
     }
 

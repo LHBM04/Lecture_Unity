@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class KickEvent : MonoBehaviour
+public class FootballEvent : MonoBehaviour
 {
     [SerializeField]
     private PlayerController controller;
@@ -20,10 +20,22 @@ public class KickEvent : MonoBehaviour
         if (controller == null)
         {
 #if UNITY_EDITOR
-            Debug.LogError("부모 객체에서 PlayerController_Dribble을 찾을 수 없습니다.");
+            Debug.LogError("PlayerController 없다!!!");
 #endif
         }
 
         controller.Kick();
+    }
+
+    public void Dribble()
+    {
+        if (controller == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("PlayerController 없다!!!");
+#endif
+        }
+
+        controller.Dribble();
     }
 }

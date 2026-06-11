@@ -157,6 +157,8 @@ MonoBehaviour:
   rotateSpeed: 250
   ballTransform: {fileID: 1763057056}
   dribbleRange: 2
+  dribbleTouchForce: 3
+  dribbleForwardOffset: 0.5
   kickForce: 20
   upwardAngle: 0.3
   maxChargeTime: 1

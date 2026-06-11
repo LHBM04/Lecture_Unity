@@ -177,6 +177,17 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.CurrentGameMode == GameManager.GameMode.Dribble && ballTransform != null)
+        {
+            float distance = Vector3.Distance(transform.position, ballTransform.position);
+            bool shouldDribble = (distance <= dribbleRange) && (direction != Vector2.zero);
+
+            if (animator != null && dribbleBoolHash != 0)
+            {
+                animator.SetBool(dribbleBoolHash, shouldDribble);
+            }
+        }
+
         if (direction == Vector2.zero)
         {
             rigidbody.linearVelocity = new Vector3(0, rigidbody.linearVelocity.y, 0);
@@ -215,7 +226,18 @@ public class PlayerController : MonoBehaviour
 
     public void Dribble()
     {
-        if (ballTransform != null && ballTransform.TryGetComponent(out Rigidbody ballRigidbody))
+        if (ballTransform == null)
+        {
+            return;
+        }
+
+        if (Vector3.Distance(transform.position, ballTransform.position) >= dribbleRange)
+        {
+            Debug.Log("!!");
+            return;
+        }
+
+        if (ballTransform.TryGetComponent(out Rigidbody ballRigidbody))
         {
             Vector3 dribbleDirection = (transform.forward + transform.up * 0.1f).normalized;
 

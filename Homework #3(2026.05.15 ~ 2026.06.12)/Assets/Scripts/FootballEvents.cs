@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FootballEvent : MonoBehaviour
+public class FootballEvents : MonoBehaviour
 {
     [SerializeField]
     private PlayerController controller;

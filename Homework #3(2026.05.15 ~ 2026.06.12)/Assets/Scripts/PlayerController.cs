@@ -1,15 +1,11 @@
-﻿using NUnit.Framework.Constraints;
-using System.Collections;
-using System.Net.NetworkInformation;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
 /// 플레이어 컨트롤러
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerController_Dribble : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField]
@@ -18,7 +14,7 @@ public class PlayerController_Dribble : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
-    [Header("Movement")]
+    [Header("Status")]
     [SerializeField]
     private float jogSpeed;
 
@@ -34,8 +30,20 @@ public class PlayerController_Dribble : MonoBehaviour
     [SerializeField] 
     private float dribbleRange;
 
-    public Transform dribblePoint;
+    [SerializeField]
+    private float kickForce;
 
+    [SerializeField]
+    private float upwardAngle;
+
+    [SerializeField]
+    private float maxChargeTime;
+    private float chargeStartTime;
+
+    [SerializeField]
+    private float minPowerMultiplier;
+    private float currentPowerMultiplier;
+    
     [Header("Animations")]
     [SerializeField]
     private string jogBool;
@@ -53,9 +61,14 @@ public class PlayerController_Dribble : MonoBehaviour
     private string freeKickTrigger;
     private int freeKickTriggerHash;
 
+    [SerializeField]
+    private string penaltyKickTrigger;
+    private int penaltyKickTriggerHash;
+
     private Vector2 direction;
     private bool isSprinting;
     private bool isDribbling;
+    private bool isKicking;
 
     private PlayerInputActions playerActions;
     private InputAction jogAction;
@@ -71,10 +84,17 @@ public class PlayerController_Dribble : MonoBehaviour
         sprintSpeed = 5.5f;
         rotateSpeed = 10.0f;
 
+        kickForce = 25.0f;
+        upwardAngle = 0.3f;
+
+        maxChargeTime = 1.0f;
+        minPowerMultiplier = 0.3f;
+
         jogBool = "Jog";
         sprintBool = "Sprint";
         dribbleBool = "Dribble";
-        freeKickTrigger = "Freekick";
+        freeKickTrigger = "Free Kick";
+        penaltyKickTrigger = "Penalty Kick";
     }
 
     private void Awake()
@@ -91,9 +111,11 @@ public class PlayerController_Dribble : MonoBehaviour
         sprintBoolHash = !string.IsNullOrEmpty(sprintBool) ? Animator.StringToHash(sprintBool) : 0;
         dribbleBoolHash = !string.IsNullOrEmpty(dribbleBool) ? Animator.StringToHash(dribbleBool) : 0;
         freeKickTriggerHash = !string.IsNullOrEmpty(freeKickTrigger) ? Animator.StringToHash(freeKickTrigger) : 0;
+        penaltyKickTriggerHash = !string.IsNullOrEmpty(penaltyKickTrigger) ? Animator.StringToHash(penaltyKickTrigger) : 0;
 
         isSprinting = false;
         isDribbling = false;
+        isKicking = false;
     }
 
     private void OnEnable()
@@ -116,7 +138,8 @@ public class PlayerController_Dribble : MonoBehaviour
         sprintAction.canceled += OnSprintCanceled;
 
         kickAction.Enable();
-        kickAction.started += OnFreeKickStarted;
+        kickAction.started += OnKickStarted;
+        kickAction.canceled += OnKickCanceled;
     }
 
     private void OnDisable()
@@ -139,16 +162,11 @@ public class PlayerController_Dribble : MonoBehaviour
         sprintAction.canceled -= OnSprintCanceled;
 
         kickAction.Disable();
-        kickAction.started -= OnFreeKickStarted;
+        kickAction.started -= OnKickStarted;
+        kickAction.canceled -= OnKickCanceled;
     }
 
     private void FixedUpdate()
-    {
-        CheckDribbleState();
-        GroundControl();
-    }
-
-    private void GroundControl()
     {
         if (direction == Vector2.zero)
         {
@@ -168,55 +186,33 @@ public class PlayerController_Dribble : MonoBehaviour
         rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.fixedDeltaTime));
     }
 
-    private void CheckDribbleState()
+    public void ChangeMode(GameManager.GameMode mode)
     {
-        if (ballTransform == null || animator == null)
+        switch(mode)
         {
-            return;
-        }
-
-        float distance = Vector3.Distance(transform.position, ballTransform.position);
-        bool nearBall = (distance <= dribbleRange) && (direction != Vector2.zero);
-
-        if (nearBall != isDribbling)
-        {
-            isDribbling = nearBall;
-
-            if (dribbleBoolHash != 0)
-            {
-                animator.SetBool(dribbleBoolHash, isDribbling);
-            }
+            case GameManager.GameMode.Dribble:
+                jogAction.Enable();
+                sprintAction.Enable();
+                kickAction.Disable();
+                break;
+            case GameManager.GameMode.FreeKick:
+            case GameManager.GameMode.PenaltyKick:
+                jogAction.Disable();
+                sprintAction.Disable();
+                kickAction.Enable();
+                break;
         }
     }
 
-    [Header("Kick Settings")]
-    [SerializeField] 
-    private float kickForce = 20.0f;
-    
-    [SerializeField] 
-    private float upwardAngle = 0.2f;
-
-    [SerializeField] 
-    private float kickCooldown = 0.5f;
-
-    private float nextDribbleTime = 0f;
-
-    public void ExecuteKick()
+    public void Kick()
     {
-        if (ballTransform == null && ballTransform.TryGetComponent(out Rigidbody ballRigidbody))
+        if (ballTransform != null && ballTransform.TryGetComponent(out Rigidbody ballRigidbody))
         {
+            float finalForce = kickForce * currentPowerMultiplier;
             Vector3 kickDirection = (transform.forward + (Vector3.up * upwardAngle)).normalized;
 
             ballRigidbody.linearVelocity = Vector3.zero;
-            ballRigidbody.AddForce(kickDirection * kickForce, ForceMode.Impulse);
-
-            nextDribbleTime = Time.time + kickCooldown;
-            isDribbling = false;
-
-            if (animator != null && dribbleBoolHash != 0)
-            {
-                animator.SetBool(dribbleBoolHash, false);
-            }
+            ballRigidbody.AddForce(kickDirection * finalForce, ForceMode.Impulse);
         }
     }
 
@@ -265,31 +261,38 @@ public class PlayerController_Dribble : MonoBehaviour
         }
     }
 
-    private void OnFreeKickStarted(InputAction.CallbackContext context)
+    private void OnKickStarted(InputAction.CallbackContext context)
     {
-        if (!isDribbling)
-        {
-            return;
-        }
-
-        if (animator != null && freeKickTriggerHash != 0)
-        {
-            animator.SetTrigger(freeKickTriggerHash);
-
-            // tartCoroutine(WaitForFreeKickAnimationCoroutine());
-        }
+        chargeStartTime = Time.time;
+        isKicking = true;
     }
 
-    private void OnPenaltyKickStarted(InputAction.CallbackContext context)
+    private void OnKickCanceled(InputAction.CallbackContext context)
     {
-        if (!isDribbling)
-        {
-            return;
-        }
+        float holdTime = Time.time - chargeStartTime;
 
-        if (animator != null && freeKickTriggerHash != 0)
+        currentPowerMultiplier = Mathf.Clamp(holdTime / maxChargeTime, minPowerMultiplier, 1.0f);
+        isKicking = false;
+
+        if (animator != null)
         {
-            animator.SetTrigger(freeKickTriggerHash);
+            var currentMode = GameManager.Instance.CurrentGameMode;
+
+            switch (currentMode)
+            {
+                case GameManager.GameMode.FreeKick:
+                    if (freeKickTriggerHash != 0)
+                    {
+                        animator.SetTrigger(freeKickTriggerHash);
+                    }
+                    break;
+                case GameManager.GameMode.PenaltyKick:
+                    if (penaltyKickTriggerHash != 0)
+                    {
+                        animator.SetTrigger(penaltyKickTriggerHash);
+                    }
+                    break;
+            }
         }
     }
 }

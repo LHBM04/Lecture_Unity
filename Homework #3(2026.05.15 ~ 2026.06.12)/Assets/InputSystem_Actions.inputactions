@@ -115,6 +115,94 @@
             ]
         },
         {
+            "name": "System",
+            "id": "9b6455bb-1156-4f54-b2c9-c2a1320926cd",
+            "actions": [
+                {
+                    "name": "Restart",
+                    "type": "Button",
+                    "id": "eeceeef0-4e33-4c1c-a6a8-6a130a682f5e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Dribble Mode",
+                    "type": "Button",
+                    "id": "1e78fdc5-fb6a-4b16-8269-eba3c737d846",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Free Kick Mode",
+                    "type": "Button",
+                    "id": "55aa5bc3-5bf7-4676-8240-a00d238d042b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Penalty Kick Mode",
+                    "type": "Button",
+                    "id": "bd25c403-2f29-4407-973b-df22aa2e9c97",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a602fda3-30b7-40e9-9622-2ee1c4fecbf5",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Restart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1325b1cf-e5b8-4076-84d8-ac1f73aca386",
+                    "path": "<Keyboard>/f2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Free Kick Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d79e262b-5cee-4de3-98f8-dfddb02c7b7c",
+                    "path": "<Keyboard>/f1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Dribble Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a983a409-f15d-4582-a037-4feaaa9b739d",
+                    "path": "<Keyboard>/f3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Penalty Kick Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "UI",
             "id": "272f6d14-89ba-496f-b7ff-215263d3219f",
             "actions": [

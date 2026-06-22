@@ -33,16 +33,6 @@ public class PlayerController : MonoBehaviour
         _groundSpeedFloatHash = !string.IsNullOrEmpty(_groundSpeedFloat) ? Animator.StringToHash(_groundSpeedFloat) : 0;
     }
 
-    public void OnMove(InputValue value)
-    {
-        _inputDirection = value.Get<Vector2>();
-    }
-
-    public void OnSprint(InputValue value)
-    {
-        _isRunningPressed = value.Get<float>() > 0.5f;
-    }
-
     public void Update()
     {
         bool isMoving = _inputDirection.sqrMagnitude > 0.001f;

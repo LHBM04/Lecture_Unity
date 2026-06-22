@@ -40,8 +40,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnSprint(InputValue value)
     {
-        _isRunningPressed = value.isPressed;
-        Debug.Log($"Sprint Key State Changed: {_isRunningPressed}");
+        _isRunningPressed = value.Get<float>() > 0.5f;
     }
 
     public void Update()

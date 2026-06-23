@@ -13,5 +13,5 @@ AssetOrigin:
   productId: 135217
   packageName: 3D Game Kit - Character Pack
   packageVersion: 1.0
-  assetPath: Assets/3D Game Kit - Character Pack/Shaders/EnergyCore.shader
+  assetPath: Assets/Shaders/Character/EnergyCore.shader
   uploadId: 518974

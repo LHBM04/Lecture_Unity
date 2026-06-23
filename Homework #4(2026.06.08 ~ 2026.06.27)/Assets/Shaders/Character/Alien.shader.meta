@@ -9,8 +9,8 @@ ShaderImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 135218
-  packageName: 3D Game Kit - Props Pack
-  packageVersion: 6.0
-  assetPath: Assets/Shaders/Alien.shader
-  uploadId: 689476
+  productId: 135217
+  packageName: 3D Game Kit - Character Pack
+  packageVersion: 1.0
+  assetPath: Assets/Shaders/Character/Alien.shader
+  uploadId: 518974

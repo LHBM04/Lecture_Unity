@@ -364,5 +364,5 @@ AssetOrigin:
   productId: 135217
   packageName: 3D Game Kit - Character Pack
   packageVersion: 1.0
-  assetPath: Assets/3D Game Kit - Character Pack/Characters/Spitter/AnimationClips/@SpitterSpit.fbx
+  assetPath: Assets/Animations/Character/Spitter/@SpitterSpit.fbx
   uploadId: 518974

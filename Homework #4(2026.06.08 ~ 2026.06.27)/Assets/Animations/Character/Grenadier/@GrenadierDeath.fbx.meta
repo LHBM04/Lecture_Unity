@@ -287,5 +287,5 @@ AssetOrigin:
   productId: 135217
   packageName: 3D Game Kit - Character Pack
   packageVersion: 1.0
-  assetPath: Assets/3D Game Kit - Character Pack/Characters/Grenadier/AnimationClips/@GrenadierDeath.fbx
+  assetPath: Assets/Animations/Character/Grenadier/@GrenadierDeath.fbx
   uploadId: 518974

@@ -91,14 +91,29 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         float currentMoveSpeed = _moveSpeed * (_isRunningPressed ? _sprintSpeedMultiplier : 1f);
-        
+
         if (_controller.isGrounded)
         {
             _direction.x = _inputMovement.x * currentMoveSpeed;
             _direction.z = _inputMovement.y * currentMoveSpeed;
 
-            if (_direction.y < 0) 
+            if (_direction.y < 0)
+            {
                 _direction.y = -1f;
+            }
+
+            if (_inputMovement.sqrMagnitude > 0.01f)
+            {
+                Vector3 lookDirection = new Vector3(_direction.x, 0f, _direction.z);
+
+                Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    targetRotation,
+                    720f * Time.fixedDeltaTime
+                );
+            }
         }
         else
         {

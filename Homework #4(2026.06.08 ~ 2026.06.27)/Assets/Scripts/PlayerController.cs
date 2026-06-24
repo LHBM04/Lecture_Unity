@@ -48,6 +48,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] 
     private bool _isRunningPressed;
 
+    [SerializeField]
+    private Transform _cameraTransform;
+    [SerializeField]
+    private float _rotationSmoothTime = 1.0f;
+    private float _rotationVelocity;
+
     private void Reset()
     {
         _controller = GetComponent<CharacterController>();
@@ -70,63 +76,54 @@ public class PlayerController : MonoBehaviour
         _moveDirectionFloatHash = !string.IsNullOrEmpty(_moveDirectionFloat) ? Animator.StringToHash(_moveDirectionFloat) : 0;
     }
 
+    private void Start()
+    {
+        Cursor.visible = false;
+    }
+
     private void Update()
     {
-        // 애니메이터 업데이트 (단방향 구조 유지)
         if (_animator != null)
         {
-            bool isMoving = _inputMovement.sqrMagnitude > 0.01f;
+            bool _isTurningBack = _animator.GetCurrentAnimatorStateInfo(0).IsTag("Turn Back");
+
+            bool isMoving = _inputMovement.sqrMagnitude > 0.01f && !_isTurningBack;
+
             _animator.SetBool(_movingBoolHash, isMoving);
             _animator.SetBool(_groundedBoolHash, _controller.isGrounded);
 
             float targetSpeedParam = isMoving ? (_isRunningPressed ? 1.0f : 0.5f) : 0f;
             _currentSpeedParam = Mathf.MoveTowards(_currentSpeedParam, targetSpeedParam, 5f * Time.deltaTime);
             _animator.SetFloat(_moveSpeedFloatHash, _currentSpeedParam);
+
+            _animator.SetFloat("Vertical Velocity", _controller.velocity.y);
         }
     }
+
 
     private void FixedUpdate()
     {
         float currentMoveSpeed = _moveSpeed * (_isRunningPressed ? _sprintSpeedMultiplier : 1f);
         Vector3 moveVector = Vector3.zero;
 
-        var _cameraTransform = Camera.main.transform;
-        // 1. 카메라 시점 기준 이동 벡터 생성
-        if (_cameraTransform != null)
+        if (_inputMovement.sqrMagnitude >= 0.01f)
         {
-            Vector3 camForward = _cameraTransform.forward;
-            Vector3 camRight = _cameraTransform.right;
+            float inputAngle = Mathf.Atan2(_inputMovement.x, _inputMovement.y) * Mathf.Rad2Deg;
+            float targetAngle = inputAngle + _cameraTransform.eulerAngles.y;
 
-            // 수평 이동만을 위해 Y축 성분 제거
-            camForward.y = 0f;
-            camRight.y = 0f;
-            camForward.Normalize();
-            camRight.Normalize();
+            float smoothTargetAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _rotationVelocity, _rotationSmoothTime);
+            transform.rotation = Quaternion.Euler(0.0f, smoothTargetAngle, 0.0f);
 
-            // 카메라의 정면과 우측에 키보드 입력을 곱해 실제 이동 방향 도출
-            moveVector = (camForward * _inputMovement.y) + (camRight * _inputMovement.x);
-            if (moveVector.sqrMagnitude > 1f) moveVector.Normalize();
+            moveVector = Quaternion.Euler(0.0f, targetAngle, 0.0f) * Vector3.forward;
         }
 
-        // 2. 물리 이동 연산 및 플레이어 회전
         if (_controller.isGrounded)
         {
             _direction.x = moveVector.x * currentMoveSpeed;
             _direction.z = moveVector.z * currentMoveSpeed;
 
-            if (_direction.y < 0) _direction.y = -1f;
-
-            // 3. 이동 입력이 있을 때만 가야 할 방향(moveVector)으로 플레이어를 회전
-            if (_inputMovement.sqrMagnitude > 0.01f && moveVector.sqrMagnitude > 0.001f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(moveVector);
-
-                transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation,
-                    targetRotation,
-                    2.0f * Time.fixedDeltaTime
-                );
-            }
+            if (_direction.y < 0)
+                _direction.y = -1f;
         }
         else
         {
@@ -143,16 +140,6 @@ public class PlayerController : MonoBehaviour
         _inputMovement = inputValue.Get<Vector2>();
     }
 
-    private Vector2 _inputLook;
-
-    [SerializeField]
-    private float _mouseSensitivity = 2.0f;
-
-    public void OnLook(InputValue inputValue)
-    {
-        // _inputLook = inputValue.Get<Vector2>();
-    }
-
     public void OnSprint(InputValue inputValue)
     {
         _isRunningPressed = inputValue.isPressed;
@@ -164,5 +151,11 @@ public class PlayerController : MonoBehaviour
         {
             _direction.y = _jumpForce;
         }
+    }
+
+    public void OnFire(InputValue inputValue)
+    {
+        _animator.SetBool(_movingBool, true);
+        _animator.SetTrigger("Fire");
     }
 }

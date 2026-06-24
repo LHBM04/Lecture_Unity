@@ -72,63 +72,85 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _animator.SetBool(_groundedBoolHash, _controller.isGrounded);
-        _animator.SetFloat("Vertical Velocity", _controller.velocity.y);
-
-        _animator.SetBool(_movingBoolHash, _inputMovement.sqrMagnitude > 0.01f);
-
-        float targetSpeedParam = _inputMovement.sqrMagnitude > 0.01f ? (_isRunningPressed ? 1.0f : 0.5f) : 0f;
-        _currentSpeedParam = Mathf.MoveTowards(_currentSpeedParam, targetSpeedParam, 5f * Time.deltaTime);
-        _animator.SetFloat(_moveSpeedFloatHash, _currentSpeedParam);
-
-        if (_inputMovement.sqrMagnitude > 0.01f)
+        // 애니메이터 업데이트 (단방향 구조 유지)
+        if (_animator != null)
         {
-            float targetAngle = Mathf.Atan2(_inputMovement.x, _inputMovement.y) * Mathf.Rad2Deg;
-            _animator.SetFloat(_moveDirectionFloatHash, targetAngle);
+            bool isMoving = _inputMovement.sqrMagnitude > 0.01f;
+            _animator.SetBool(_movingBoolHash, isMoving);
+            _animator.SetBool(_groundedBoolHash, _controller.isGrounded);
+
+            float targetSpeedParam = isMoving ? (_isRunningPressed ? 1.0f : 0.5f) : 0f;
+            _currentSpeedParam = Mathf.MoveTowards(_currentSpeedParam, targetSpeedParam, 5f * Time.deltaTime);
+            _animator.SetFloat(_moveSpeedFloatHash, _currentSpeedParam);
         }
     }
 
     private void FixedUpdate()
     {
         float currentMoveSpeed = _moveSpeed * (_isRunningPressed ? _sprintSpeedMultiplier : 1f);
+        Vector3 moveVector = Vector3.zero;
 
+        var _cameraTransform = Camera.main.transform;
+        // 1. 카메라 시점 기준 이동 벡터 생성
+        if (_cameraTransform != null)
+        {
+            Vector3 camForward = _cameraTransform.forward;
+            Vector3 camRight = _cameraTransform.right;
+
+            // 수평 이동만을 위해 Y축 성분 제거
+            camForward.y = 0f;
+            camRight.y = 0f;
+            camForward.Normalize();
+            camRight.Normalize();
+
+            // 카메라의 정면과 우측에 키보드 입력을 곱해 실제 이동 방향 도출
+            moveVector = (camForward * _inputMovement.y) + (camRight * _inputMovement.x);
+            if (moveVector.sqrMagnitude > 1f) moveVector.Normalize();
+        }
+
+        // 2. 물리 이동 연산 및 플레이어 회전
         if (_controller.isGrounded)
         {
-            _direction.x = _inputMovement.x * currentMoveSpeed;
-            _direction.z = _inputMovement.y * currentMoveSpeed;
+            _direction.x = moveVector.x * currentMoveSpeed;
+            _direction.z = moveVector.z * currentMoveSpeed;
 
-            if (_direction.y < 0)
+            if (_direction.y < 0) _direction.y = -1f;
+
+            // 3. 이동 입력이 있을 때만 가야 할 방향(moveVector)으로 플레이어를 회전
+            if (_inputMovement.sqrMagnitude > 0.01f && moveVector.sqrMagnitude > 0.001f)
             {
-                _direction.y = -1f;
-            }
-
-            if (_inputMovement.sqrMagnitude > 0.01f)
-            {
-                Vector3 lookDirection = new Vector3(_direction.x, 0f, _direction.z);
-
-                Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+                Quaternion targetRotation = Quaternion.LookRotation(moveVector);
 
                 transform.rotation = Quaternion.RotateTowards(
                     transform.rotation,
                     targetRotation,
-                    720f * Time.fixedDeltaTime
+                    2.0f * Time.fixedDeltaTime
                 );
             }
         }
         else
         {
-            _direction.x = Mathf.Lerp(_direction.x, _inputMovement.x * currentMoveSpeed, _airDrag);
-            _direction.z = Mathf.Lerp(_direction.z, _inputMovement.y * currentMoveSpeed, _airDrag);
+            _direction.x = Mathf.Lerp(_direction.x, moveVector.x * currentMoveSpeed, _airDrag);
+            _direction.z = Mathf.Lerp(_direction.z, moveVector.z * currentMoveSpeed, _airDrag);
         }
 
         _direction += _gravityDirection.normalized * (_gravity * Time.fixedDeltaTime);
-
         _controller.Move(_direction * Time.fixedDeltaTime);
     }
 
     public void OnMove(InputValue inputValue)
     {
         _inputMovement = inputValue.Get<Vector2>();
+    }
+
+    private Vector2 _inputLook;
+
+    [SerializeField]
+    private float _mouseSensitivity = 2.0f;
+
+    public void OnLook(InputValue inputValue)
+    {
+        // _inputLook = inputValue.Get<Vector2>();
     }
 
     public void OnSprint(InputValue inputValue)

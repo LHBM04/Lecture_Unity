@@ -715,14 +715,12 @@ ModelImporter:
     motionNodeName: 
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'Ellen_Spine' has translation animation
-      that will be discarded.\n\t'Ellen_Chest' has translation animation that will
-      be discarded.\n\t'Ellen_Right_UpperArm' has scale animation that will be discarded.\n\t'Ellen_Right_Arm'
-      has scale animation that will be discarded.\n\t'Ellen_Left_UpperArm' has scale
-      animation that will be discarded.\n\t'Ellen_Left_Arm' has scale animation that
-      will be discarded.\n\t'Ellen_Left_UpperLeg' has scale animation that will be
-      discarded.\n\t'Ellen_Left_LowerLeg' has scale animation that will be discarded.\n"
+      might lower retargeting quality:\n\t'Ellen_Right_UpperArm' has scale animation
+      that will be discarded.\n\t'Ellen_Right_Arm' has scale animation that will
+      be discarded.\n\t'Ellen_Left_UpperArm' has scale animation that will be discarded.\n\t'Ellen_Left_Arm'
+      has scale animation that will be discarded.\n\t'Ellen_Left_UpperLeg' has scale
+      animation that will be discarded.\n\t'Ellen_Left_LowerLeg' has scale animation
+      that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -759,7 +757,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: PlaySound
+        data: 
+        objectReferenceParameter: {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

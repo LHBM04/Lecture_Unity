@@ -42,6 +42,14 @@ public class PlayerController : MonoBehaviour
     private float _rotationSmoothTime;
     private float _rotationVelocity;
 
+    public enum WeaponType
+    {
+        Staff,
+        Gun
+    }
+
+    private WeaponType _currentWeapon;
+
     [HideInInspector]
     public bool isSpawned;
 
@@ -66,12 +74,24 @@ public class PlayerController : MonoBehaviour
     private int _verticalVelocityFloatHash;
 
     [SerializeField]
+    private string _rollTrigger;
+    private int _rollTriggerHash;
+
+    [SerializeField]
     private string _hurtTrigger;
     private int _hurtTriggerHash;
 
     [SerializeField]
     private string _deadTrigger;
     private int _deadTriggerHash;
+
+    [SerializeField]
+    private string _weaponInt;
+    private int _weaponIntHash;
+
+    [SerializeField]
+    private string _attackTrigger;
+    private int _attackTriggerHash;
 
     private void Reset()
     {
@@ -83,6 +103,7 @@ public class PlayerController : MonoBehaviour
         _airDrag = 0.1f;
         _sprintSpeedMultiplier = 2f;
         _jumpForce = 5f;
+        _currentWeapon = WeaponType.Staff;
         
         _animator = GetComponentInChildren<Animator>();
     }
@@ -94,6 +115,7 @@ public class PlayerController : MonoBehaviour
         _controller = _controller ?? GetComponent<CharacterController>();
         
         _moveSpeedParameter = 0.0f;
+        _currentWeapon = WeaponType.Staff;
         
         _animator = _animator ?? GetComponentInChildren<Animator>();
         
@@ -101,6 +123,13 @@ public class PlayerController : MonoBehaviour
         _groundedBoolHash = !string.IsNullOrEmpty(_groundedBool) ? Animator.StringToHash(_groundedBool) : 0;
         _moveSpeedFloatHash = !string.IsNullOrEmpty(_moveSpeedFloat) ? Animator.StringToHash(_moveSpeedFloat) : 0;
         _verticalVelocityFloatHash = !string.IsNullOrEmpty(_verticalVelocityFloat) ? Animator.StringToHash(_verticalVelocityFloat) : 0;
+        _rollTriggerHash = !string.IsNullOrEmpty(_rollTrigger) ? Animator.StringToHash(_rollTrigger) : 0;
+        _hurtTriggerHash = !string.IsNullOrEmpty(_hurtTrigger) ? Animator.StringToHash(_hurtTrigger) : 0;
+        _deadTriggerHash = !string.IsNullOrEmpty(_deadTrigger) ? Animator.StringToHash(_deadTrigger) : 0;
+        _weaponIntHash = !string.IsNullOrEmpty(_weaponInt) ? Animator.StringToHash(_weaponInt) : 0;
+        _attackTriggerHash = !string.IsNullOrEmpty(_attackTrigger) ? Animator.StringToHash(_attackTrigger) : 0;
+
+        SetWeapon(WeaponType.Staff);
     }
 
     private void OnEnable()
@@ -115,7 +144,8 @@ public class PlayerController : MonoBehaviour
         
         _inputActions.Player.Jump.performed += OnJumpPerformed;
         _inputActions.Player.Roll.performed += OnRollPerformed;
-        _inputActions.Player.Fire.performed += OnFirePerformed;
+        _inputActions.Player.Attack.performed += OnAttackPerformed;
+        _inputActions.Player.Scroll.performed += OnScrollPerformed;
         
         _inputActions.Player.Enable();
     }
@@ -134,7 +164,8 @@ public class PlayerController : MonoBehaviour
         
         _inputActions.Player.Jump.performed -= OnJumpPerformed;
         _inputActions.Player.Roll.performed -= OnRollPerformed;
-        _inputActions.Player.Fire.performed -= OnFirePerformed;
+        _inputActions.Player.Attack.performed -= OnAttackPerformed;
+        _inputActions.Player.Scroll.performed -= OnScrollPerformed;
     }
 
     private void OnDestroy()
@@ -261,12 +292,47 @@ public class PlayerController : MonoBehaviour
 
     private void OnRollPerformed(InputAction.CallbackContext context)
     {
-        _animator.SetTrigger("Roll");
+        if (_animator != null && _rollTriggerHash != 0)
+        {
+            _animator.SetTrigger(_rollTriggerHash);
+        }
     }
 
-    private void OnFirePerformed(InputAction.CallbackContext context)
+    private void OnAttackPerformed(InputAction.CallbackContext context)
     {
-        _animator.SetBool(_movingBool, true);
-        _animator.SetTrigger("Fire");
+        if (_animator != null)
+        {
+            if (_movingBoolHash != 0)
+            {
+                _animator.SetBool(_movingBoolHash, true);
+            }
+            if (_movingBoolHash != 0)
+            {
+                _animator.SetTrigger(_attackTriggerHash);
+            }
+        }
+    }
+
+    private void OnScrollPerformed(InputAction.CallbackContext context)
+    {
+        float scrollDelta = context.ReadValue<Vector2>().y;
+
+        if (Mathf.Approximately(scrollDelta, 0.0f))
+        {
+            return;
+        }
+
+        WeaponType nextWeapon = _currentWeapon == WeaponType.Staff ? WeaponType.Gun : WeaponType.Staff;
+        SetWeapon(nextWeapon);
+    }
+
+    private void SetWeapon(WeaponType weaponType)
+    {
+        _currentWeapon = weaponType;
+
+        if (_animator != null && _weaponIntHash != 0)
+        {
+            _animator.SetInteger(_weaponIntHash, (int)_currentWeapon);
+        }
     }
 }

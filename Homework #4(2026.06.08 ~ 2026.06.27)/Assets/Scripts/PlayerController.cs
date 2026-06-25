@@ -42,16 +42,26 @@ public class PlayerController : MonoBehaviour
     private float _rotationSmoothTime;
     private float _rotationVelocity;
 
-    public enum WeaponType
+    [Header("Weapons")]
+    [SerializeField]
+    private GameObject _staff;
+
+    [SerializeField]
+    private Transform _staffGripTransform;
+
+    [SerializeField]
+    private GameObject _pistol;
+
+    [SerializeField]
+    private Transform _pistolGripTransform;
+
+    public enum WeaponType : byte
     {
         Staff,
-        Gun
+        Pistol
     }
 
     private WeaponType _currentWeapon;
-
-    [HideInInspector]
-    public bool isSpawned;
 
     [Header("Animations")]
     [SerializeField] 
@@ -93,6 +103,9 @@ public class PlayerController : MonoBehaviour
     private string _attackTrigger;
     private int _attackTriggerHash;
 
+    [HideInInspector]
+    public bool isSpawned;
+
     private void Reset()
     {
         _controller = GetComponent<CharacterController>();
@@ -118,7 +131,6 @@ public class PlayerController : MonoBehaviour
         _currentWeapon = WeaponType.Staff;
         
         _animator = _animator ?? GetComponentInChildren<Animator>();
-        
         _movingBoolHash = !string.IsNullOrEmpty(_movingBool) ? Animator.StringToHash(_movingBool) : 0;
         _groundedBoolHash = !string.IsNullOrEmpty(_groundedBool) ? Animator.StringToHash(_groundedBool) : 0;
         _moveSpeedFloatHash = !string.IsNullOrEmpty(_moveSpeedFloat) ? Animator.StringToHash(_moveSpeedFloat) : 0;
@@ -129,6 +141,7 @@ public class PlayerController : MonoBehaviour
         _weaponIntHash = !string.IsNullOrEmpty(_weaponInt) ? Animator.StringToHash(_weaponInt) : 0;
         _attackTriggerHash = !string.IsNullOrEmpty(_attackTrigger) ? Animator.StringToHash(_attackTrigger) : 0;
 
+        AttachWeapons();
         SetWeapon(WeaponType.Staff);
     }
 
@@ -306,7 +319,7 @@ public class PlayerController : MonoBehaviour
             {
                 _animator.SetBool(_movingBoolHash, true);
             }
-            if (_movingBoolHash != 0)
+            if (_attackTriggerHash != 0)
             {
                 _animator.SetTrigger(_attackTriggerHash);
             }
@@ -322,7 +335,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        WeaponType nextWeapon = _currentWeapon == WeaponType.Staff ? WeaponType.Gun : WeaponType.Staff;
+        WeaponType nextWeapon = _currentWeapon == WeaponType.Staff ? WeaponType.Pistol : WeaponType.Staff;
         SetWeapon(nextWeapon);
     }
 
@@ -334,5 +347,31 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetInteger(_weaponIntHash, (int)_currentWeapon);
         }
+
+        if (_staff != null)
+        {
+            _staff.SetActive(_currentWeapon == WeaponType.Staff);
+        }
+
+        if (_pistol != null)
+        {
+            _pistol.SetActive(_currentWeapon == WeaponType.Pistol);
+        }
+    }
+
+    private void AttachWeapons()
+    {
+        AttachWeapon(_staff, _staffGripTransform);
+        AttachWeapon(_pistol, _pistolGripTransform);
+    }
+
+    private void AttachWeapon(GameObject weapon, Transform weaponTransform)
+    {
+        if (weapon == null || weaponTransform == null)
+        {
+            return;
+        }
+
+        weapon.transform.SetParent(weaponTransform, false);
     }
 }

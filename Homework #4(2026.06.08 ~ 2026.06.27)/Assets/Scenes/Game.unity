@@ -80024,7 +80024,10 @@ MonoBehaviour:
   _sprintSpeedMultiplier: 2
   _jumpForce: 5
   _rotationSmoothTime: 0.1
-  isSpawned: 0
+  _staff: {fileID: 5641340352732050633}
+  _staffGripTransform: {fileID: 1285757622484237580}
+  _pistol: {fileID: 4421884297366567025}
+  _pistolGripTransform: {fileID: 1285757622484237690}
   _animator: {fileID: 1285757622493549812}
   _movingBool: Is Moving
   _groundedBool: Grounded
@@ -80035,6 +80038,7 @@ MonoBehaviour:
   _deadTrigger: Dead
   _weaponInt: Weapon
   _attackTrigger: Attack
+  isSpawned: 0
 --- !u!1001 &1615050235
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -109892,7 +109896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4421884297366922321
 Transform:
   m_ObjectHideFlags: 0
@@ -110060,7 +110064,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &5641340352732050641
 GameObject:
   m_ObjectHideFlags: 0
@@ -110180,7 +110184,7 @@ Transform:
   m_GameObject: {fileID: 5641340352732050633}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.23, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

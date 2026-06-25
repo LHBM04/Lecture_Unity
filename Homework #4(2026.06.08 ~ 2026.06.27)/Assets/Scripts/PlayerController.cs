@@ -4,28 +4,49 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
+    private PlayerInputActions _inputActions;
+
+    [Header("Physics")]
     [SerializeField] 
     private CharacterController _controller;
 
-    [Space, SerializeField] 
-    private float _gravity = 9.81f;
+    [Space, SerializeField]
+    private float _gravity;
+
+    [SerializeField]
+    private Vector3 _gravityDirection;
+
+    [Header("Camera")]
+    [SerializeField]
+    private Transform _cameraTransform;
+
+    [Header("Status")]
+    [SerializeField] 
+    private float _moveSpeed;
+    private float _moveSpeedParameter;
 
     [SerializeField] 
-    private Vector3 _gravityDirection = Vector3.down;
+    private float _airDrag;
 
-    [Space, SerializeField] 
-    private float _moveSpeed = 5f;
-    [SerializeField] 
-    private float _airDrag = 0.1f;
-    [SerializeField] 
-    private float _sprintSpeedMultiplier = 2f;
-    [SerializeField] 
-    private float _jumpForce = 5f;
+    [SerializeField]
+    private float _sprintSpeedMultiplier;
+    private bool _isRunningPressed;
+
+    [SerializeField]
+    private float _jumpForce;
 
     private Vector3 _direction;
     private Vector2 _inputMovement;
 
-    [Space, SerializeField] 
+    [SerializeField]
+    private float _rotationSmoothTime;
+    private float _rotationVelocity;
+
+    [HideInInspector]
+    public bool isSpawned;
+
+    [Header("Animations")]
+    [SerializeField] 
     private Animator _animator;
 
     [SerializeField] 
@@ -40,40 +61,85 @@ public class PlayerController : MonoBehaviour
     private string _moveSpeedFloat;
     private int _moveSpeedFloatHash;
 
-    [SerializeField] 
-    private string _moveDirectionFloat;
-    private int _moveDirectionFloatHash;
-
-    private float _currentSpeedParam = 0f;
-    [SerializeField] 
-    private bool _isRunningPressed;
+    [SerializeField]
+    private string _verticalVelocityFloat;
+    private int _verticalVelocityFloatHash;
 
     [SerializeField]
-    private Transform _cameraTransform;
+    private string _hurtTrigger;
+    private int _hurtTriggerHash;
+
     [SerializeField]
-    private float _rotationSmoothTime = 1.0f;
-    private float _rotationVelocity;
+    private string _deadTrigger;
+    private int _deadTriggerHash;
 
     private void Reset()
     {
         _controller = GetComponent<CharacterController>();
+
         _gravity = 9.81f;
         _gravityDirection = Vector3.down;
+        
         _airDrag = 0.1f;
         _sprintSpeedMultiplier = 2f;
         _jumpForce = 5f;
+        
         _animator = GetComponentInChildren<Animator>();
     }
 
     private void Awake()
     {
+        _inputActions = new PlayerInputActions();
+        
         _controller = _controller ?? GetComponent<CharacterController>();
+        
+        _moveSpeedParameter = 0.0f;
+        
         _animator = _animator ?? GetComponentInChildren<Animator>();
         
         _movingBoolHash = !string.IsNullOrEmpty(_movingBool) ? Animator.StringToHash(_movingBool) : 0;
         _groundedBoolHash = !string.IsNullOrEmpty(_groundedBool) ? Animator.StringToHash(_groundedBool) : 0;
         _moveSpeedFloatHash = !string.IsNullOrEmpty(_moveSpeedFloat) ? Animator.StringToHash(_moveSpeedFloat) : 0;
-        _moveDirectionFloatHash = !string.IsNullOrEmpty(_moveDirectionFloat) ? Animator.StringToHash(_moveDirectionFloat) : 0;
+        _verticalVelocityFloatHash = !string.IsNullOrEmpty(_verticalVelocityFloat) ? Animator.StringToHash(_verticalVelocityFloat) : 0;
+    }
+
+    private void OnEnable()
+    {
+        _inputActions.Player.Move.started += OnMoveStarted;
+        _inputActions.Player.Move.performed += OnMovePerformed;
+        _inputActions.Player.Move.canceled += OnMoveCanceled;
+        
+        _inputActions.Player.Sprint.started += OnSprintStarted;
+        _inputActions.Player.Sprint.performed += OnSprintPerformed;
+        _inputActions.Player.Sprint.canceled += OnSprintCanceled;
+        
+        _inputActions.Player.Jump.performed += OnJumpPerformed;
+        _inputActions.Player.Roll.performed += OnRollPerformed;
+        _inputActions.Player.Fire.performed += OnFirePerformed;
+        
+        _inputActions.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _inputActions.Player.Disable();
+        
+        _inputActions.Player.Move.started -= OnMoveStarted;
+        _inputActions.Player.Move.performed -= OnMovePerformed;
+        _inputActions.Player.Move.canceled -= OnMoveCanceled;
+        
+        _inputActions.Player.Sprint.started -= OnSprintStarted;
+        _inputActions.Player.Sprint.performed -= OnSprintPerformed;
+        _inputActions.Player.Sprint.canceled -= OnSprintCanceled;
+        
+        _inputActions.Player.Jump.performed -= OnJumpPerformed;
+        _inputActions.Player.Roll.performed -= OnRollPerformed;
+        _inputActions.Player.Fire.performed -= OnFirePerformed;
+    }
+
+    private void OnDestroy()
+    {
+        _inputActions.Dispose();
     }
 
     private void Start()
@@ -83,26 +149,42 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!isSpawned)
+        {
+            return;
+        }
+
         if (_animator != null)
         {
-            bool _isTurningBack = _animator.GetCurrentAnimatorStateInfo(0).IsTag("Turn Back");
-
-            bool isMoving = _inputMovement.sqrMagnitude > 0.01f && !_isTurningBack;
-
-            _animator.SetBool(_movingBoolHash, isMoving);
             _animator.SetBool(_groundedBoolHash, _controller.isGrounded);
 
-            float targetSpeedParam = isMoving ? (_isRunningPressed ? 1.0f : 0.5f) : 0f;
-            _currentSpeedParam = Mathf.MoveTowards(_currentSpeedParam, targetSpeedParam, 5f * Time.deltaTime);
-            _animator.SetFloat(_moveSpeedFloatHash, _currentSpeedParam);
+            const float threshold = 0.01f;
+            if (_inputMovement.sqrMagnitude > threshold)
+            {
+                _animator.SetBool(_movingBoolHash, true);
 
-            _animator.SetFloat("Vertical Velocity", _controller.velocity.y);
+                float targetSpeedParam = _isRunningPressed ? 1.0f : 0.5f;
+                _moveSpeedParameter = Mathf.MoveTowards(_moveSpeedParameter, targetSpeedParam, 5f * Time.deltaTime);
+                _animator.SetFloat(_moveSpeedFloatHash, _moveSpeedParameter);
+            }
+            else
+            {
+                _animator.SetBool(_movingBoolHash, false);
+                _moveSpeedParameter = Mathf.MoveTowards(_moveSpeedParameter, 0f, 5f * Time.deltaTime);
+                _animator.SetFloat(_moveSpeedFloatHash, _moveSpeedParameter);
+            }
+
+            _animator.SetFloat(_verticalVelocityFloatHash, _controller.velocity.y);
         }
     }
 
-
     private void FixedUpdate()
     {
+        if (!isSpawned)
+        {
+            return;
+        }
+
         float currentMoveSpeed = _moveSpeed * (_isRunningPressed ? _sprintSpeedMultiplier : 1f);
         Vector3 moveVector = Vector3.zero;
 
@@ -123,7 +205,9 @@ public class PlayerController : MonoBehaviour
             _direction.z = moveVector.z * currentMoveSpeed;
 
             if (_direction.y < 0)
-                _direction.y = -1f;
+            {
+                _direction.y = -2f;
+            }
         }
         else
         {
@@ -135,25 +219,52 @@ public class PlayerController : MonoBehaviour
         _controller.Move(_direction * Time.fixedDeltaTime);
     }
 
-    public void OnMove(InputValue inputValue)
+    public void Ready()
     {
-        _inputMovement = inputValue.Get<Vector2>();
+        isSpawned = true;
     }
 
-    public void OnSprint(InputValue inputValue)
+    private void OnMoveStarted(InputAction.CallbackContext context)
     {
-        _isRunningPressed = inputValue.isPressed;
+        _inputMovement = context.ReadValue<Vector2>();
     }
 
-    public void OnJump(InputValue inputValue)
+    private void OnMovePerformed(InputAction.CallbackContext context)
     {
-        if (_controller.isGrounded)
-        {
-            _direction.y = _jumpForce;
-        }
+        _inputMovement = context.ReadValue<Vector2>();
     }
 
-    public void OnFire(InputValue inputValue)
+    private void OnMoveCanceled(InputAction.CallbackContext context)
+    {
+        _inputMovement = Vector2.zero;
+    }
+
+    private void OnSprintStarted(InputAction.CallbackContext context)
+    {
+        _isRunningPressed = true;
+    }
+
+    private void OnSprintPerformed(InputAction.CallbackContext context)
+    {
+        _isRunningPressed = true;
+    }
+
+    private void OnSprintCanceled(InputAction.CallbackContext context)
+    {
+        _isRunningPressed = false;
+    }
+
+    private void OnJumpPerformed(InputAction.CallbackContext context)
+    {
+        _direction.y = _jumpForce;
+    }
+
+    private void OnRollPerformed(InputAction.CallbackContext context)
+    {
+        _animator.SetTrigger("Roll");
+    }
+
+    private void OnFirePerformed(InputAction.CallbackContext context)
     {
         _animator.SetBool(_movingBool, true);
         _animator.SetTrigger("Fire");

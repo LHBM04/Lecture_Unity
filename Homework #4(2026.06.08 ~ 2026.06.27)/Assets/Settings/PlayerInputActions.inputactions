@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "InputSystem",
+    "name": "PlayerInputActions",
     "maps": [
         {
             "name": "Player",
@@ -37,6 +37,15 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "80a25b68-5ff1-48c7-aa23-398b25dafa45",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Roll",
+                    "type": "Button",
+                    "id": "3c5767e9-5e36-4aaa-86ec-7954a6ddfdc3",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -111,7 +120,7 @@
                 {
                     "name": "down",
                     "id": "a0508822-39f3-491e-bc2e-2c8d3ac6b02e",
-                    "path": "<Keyboard>/leftArrow",
+                    "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -204,6 +213,17 @@
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f3fb39f3-c570-406c-b4ef-83bc74562a3f",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

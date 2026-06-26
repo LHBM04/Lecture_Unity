@@ -1,98 +1,279 @@
 fileFormatVersion: 2
 guid: 648a783bc5108a94997d833dc9a621b8
+AssetOrigin:
+  serializedVersion: 1
+  productId: 135217
+  packageName: 3D Game Kit - Character Pack
+  packageVersion: 1.0
+  assetPath: Assets/Animations/Character/Grenadier/@GrenadierTurnRight45.fbx
+  uploadId: 518974
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: Grenadier_EyeArmor
-    100004: Grenadier_EyeArmorEnd
-    100006: Grenadier_HelmetArmor
-    100008: Grenadier_HelmetArmorEnd
-    100010: Grenadier_Hips
-    100012: Grenadier_LeftArm
-    100014: Grenadier_LeftChestArmor
-    100016: Grenadier_LeftChestArmorEnd
-    100018: Grenadier_LeftFoot
-    100020: Grenadier_LeftFootEnd
-    100022: Grenadier_LeftHand
-    100024: Grenadier_LeftHandEnd
-    100026: Grenadier_LeftHornArmor
-    100028: Grenadier_LeftHornArmorEnd
-    100030: Grenadier_LeftLowerLeg
-    100032: Grenadier_LeftShoulder
-    100034: Grenadier_LeftThumb
-    100036: Grenadier_LeftThumbEnd
-    100038: Grenadier_LeftUpperArm
-    100040: Grenadier_LeftUpperLeg
-    100042: Grenadier_RightArm
-    100044: Grenadier_RightChestArmor
-    100046: Grenadier_RightChestArmorEnd
-    100048: Grenadier_RightFoot
-    100050: Grenadier_RightFootEnd
-    100052: Grenadier_RightHand
-    100054: Grenadier_RightHandEnd
-    100056: Grenadier_RightHornArmor
-    100058: Grenadier_RightHornArmorEnd
-    100060: Grenadier_RightLowerLeg
-    100062: Grenadier_RightShoulder
-    100064: Grenadier_RightThumb
-    100066: Grenadier_RightThumbEnd
-    100068: Grenadier_RightUpperArm
-    100070: Grenadier_RightUpperLeg
-    100072: Grenadier_Root
-    100074: Grenadier_Sphere
-    100076: GrenadierMesh
-    100078: GrenadierSkeleton
-    400000: //RootNode
-    400002: Grenadier_EyeArmor
-    400004: Grenadier_EyeArmorEnd
-    400006: Grenadier_HelmetArmor
-    400008: Grenadier_HelmetArmorEnd
-    400010: Grenadier_Hips
-    400012: Grenadier_LeftArm
-    400014: Grenadier_LeftChestArmor
-    400016: Grenadier_LeftChestArmorEnd
-    400018: Grenadier_LeftFoot
-    400020: Grenadier_LeftFootEnd
-    400022: Grenadier_LeftHand
-    400024: Grenadier_LeftHandEnd
-    400026: Grenadier_LeftHornArmor
-    400028: Grenadier_LeftHornArmorEnd
-    400030: Grenadier_LeftLowerLeg
-    400032: Grenadier_LeftShoulder
-    400034: Grenadier_LeftThumb
-    400036: Grenadier_LeftThumbEnd
-    400038: Grenadier_LeftUpperArm
-    400040: Grenadier_LeftUpperLeg
-    400042: Grenadier_RightArm
-    400044: Grenadier_RightChestArmor
-    400046: Grenadier_RightChestArmorEnd
-    400048: Grenadier_RightFoot
-    400050: Grenadier_RightFootEnd
-    400052: Grenadier_RightHand
-    400054: Grenadier_RightHandEnd
-    400056: Grenadier_RightHornArmor
-    400058: Grenadier_RightHornArmorEnd
-    400060: Grenadier_RightLowerLeg
-    400062: Grenadier_RightShoulder
-    400064: Grenadier_RightThumb
-    400066: Grenadier_RightThumbEnd
-    400068: Grenadier_RightUpperArm
-    400070: Grenadier_RightUpperLeg
-    400072: Grenadier_Root
-    400074: Grenadier_Sphere
-    400076: GrenadierMesh
-    400078: GrenadierSkeleton
-    2100000: Keeper_Mat
-    2100002: Keeper_Core_Mat
-    2100004: Keeper_Eye_Mat
-    4300000: GrenadierMesh
-    7400000: GrenadierTurnRight45
-    9500000: //RootNode
-    13700000: GrenadierMesh
+  serializedVersion: 24200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: Grenadier_EyeArmor
+  - first:
+      1: 100004
+    second: Grenadier_EyeArmorEnd
+  - first:
+      1: 100006
+    second: Grenadier_HelmetArmor
+  - first:
+      1: 100008
+    second: Grenadier_HelmetArmorEnd
+  - first:
+      1: 100010
+    second: Grenadier_Hips
+  - first:
+      1: 100012
+    second: Grenadier_LeftArm
+  - first:
+      1: 100014
+    second: Grenadier_LeftChestArmor
+  - first:
+      1: 100016
+    second: Grenadier_LeftChestArmorEnd
+  - first:
+      1: 100018
+    second: Grenadier_LeftFoot
+  - first:
+      1: 100020
+    second: Grenadier_LeftFootEnd
+  - first:
+      1: 100022
+    second: Grenadier_LeftHand
+  - first:
+      1: 100024
+    second: Grenadier_LeftHandEnd
+  - first:
+      1: 100026
+    second: Grenadier_LeftHornArmor
+  - first:
+      1: 100028
+    second: Grenadier_LeftHornArmorEnd
+  - first:
+      1: 100030
+    second: Grenadier_LeftLowerLeg
+  - first:
+      1: 100032
+    second: Grenadier_LeftShoulder
+  - first:
+      1: 100034
+    second: Grenadier_LeftThumb
+  - first:
+      1: 100036
+    second: Grenadier_LeftThumbEnd
+  - first:
+      1: 100038
+    second: Grenadier_LeftUpperArm
+  - first:
+      1: 100040
+    second: Grenadier_LeftUpperLeg
+  - first:
+      1: 100042
+    second: Grenadier_RightArm
+  - first:
+      1: 100044
+    second: Grenadier_RightChestArmor
+  - first:
+      1: 100046
+    second: Grenadier_RightChestArmorEnd
+  - first:
+      1: 100048
+    second: Grenadier_RightFoot
+  - first:
+      1: 100050
+    second: Grenadier_RightFootEnd
+  - first:
+      1: 100052
+    second: Grenadier_RightHand
+  - first:
+      1: 100054
+    second: Grenadier_RightHandEnd
+  - first:
+      1: 100056
+    second: Grenadier_RightHornArmor
+  - first:
+      1: 100058
+    second: Grenadier_RightHornArmorEnd
+  - first:
+      1: 100060
+    second: Grenadier_RightLowerLeg
+  - first:
+      1: 100062
+    second: Grenadier_RightShoulder
+  - first:
+      1: 100064
+    second: Grenadier_RightThumb
+  - first:
+      1: 100066
+    second: Grenadier_RightThumbEnd
+  - first:
+      1: 100068
+    second: Grenadier_RightUpperArm
+  - first:
+      1: 100070
+    second: Grenadier_RightUpperLeg
+  - first:
+      1: 100072
+    second: Grenadier_Root
+  - first:
+      1: 100074
+    second: Grenadier_Sphere
+  - first:
+      1: 100076
+    second: GrenadierMesh
+  - first:
+      1: 100078
+    second: GrenadierSkeleton
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: Grenadier_EyeArmor
+  - first:
+      4: 400004
+    second: Grenadier_EyeArmorEnd
+  - first:
+      4: 400006
+    second: Grenadier_HelmetArmor
+  - first:
+      4: 400008
+    second: Grenadier_HelmetArmorEnd
+  - first:
+      4: 400010
+    second: Grenadier_Hips
+  - first:
+      4: 400012
+    second: Grenadier_LeftArm
+  - first:
+      4: 400014
+    second: Grenadier_LeftChestArmor
+  - first:
+      4: 400016
+    second: Grenadier_LeftChestArmorEnd
+  - first:
+      4: 400018
+    second: Grenadier_LeftFoot
+  - first:
+      4: 400020
+    second: Grenadier_LeftFootEnd
+  - first:
+      4: 400022
+    second: Grenadier_LeftHand
+  - first:
+      4: 400024
+    second: Grenadier_LeftHandEnd
+  - first:
+      4: 400026
+    second: Grenadier_LeftHornArmor
+  - first:
+      4: 400028
+    second: Grenadier_LeftHornArmorEnd
+  - first:
+      4: 400030
+    second: Grenadier_LeftLowerLeg
+  - first:
+      4: 400032
+    second: Grenadier_LeftShoulder
+  - first:
+      4: 400034
+    second: Grenadier_LeftThumb
+  - first:
+      4: 400036
+    second: Grenadier_LeftThumbEnd
+  - first:
+      4: 400038
+    second: Grenadier_LeftUpperArm
+  - first:
+      4: 400040
+    second: Grenadier_LeftUpperLeg
+  - first:
+      4: 400042
+    second: Grenadier_RightArm
+  - first:
+      4: 400044
+    second: Grenadier_RightChestArmor
+  - first:
+      4: 400046
+    second: Grenadier_RightChestArmorEnd
+  - first:
+      4: 400048
+    second: Grenadier_RightFoot
+  - first:
+      4: 400050
+    second: Grenadier_RightFootEnd
+  - first:
+      4: 400052
+    second: Grenadier_RightHand
+  - first:
+      4: 400054
+    second: Grenadier_RightHandEnd
+  - first:
+      4: 400056
+    second: Grenadier_RightHornArmor
+  - first:
+      4: 400058
+    second: Grenadier_RightHornArmorEnd
+  - first:
+      4: 400060
+    second: Grenadier_RightLowerLeg
+  - first:
+      4: 400062
+    second: Grenadier_RightShoulder
+  - first:
+      4: 400064
+    second: Grenadier_RightThumb
+  - first:
+      4: 400066
+    second: Grenadier_RightThumbEnd
+  - first:
+      4: 400068
+    second: Grenadier_RightUpperArm
+  - first:
+      4: 400070
+    second: Grenadier_RightUpperLeg
+  - first:
+      4: 400072
+    second: Grenadier_Root
+  - first:
+      4: 400074
+    second: Grenadier_Sphere
+  - first:
+      4: 400076
+    second: GrenadierMesh
+  - first:
+      4: 400078
+    second: GrenadierSkeleton
+  - first:
+      21: 2100000
+    second: Keeper_Mat
+  - first:
+      21: 2100002
+    second: Keeper_Core_Mat
+  - first:
+      21: 2100004
+    second: Keeper_Eye_Mat
+  - first:
+      43: 4300000
+    second: GrenadierMesh
+  - first:
+      74: 7400000
+    second: GrenadierTurnRight45
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      137: 13700000
+    second: GrenadierMesh
   externalObjects: {}
   materials:
-    importMaterials: 0
+    materialImportMode: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -101,9 +282,8 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -121,6 +301,7 @@ ModelImporter:
     - serializedVersion: 16
       name: GrenadierTurnRight45
       takeName: Take 001
+      internalID: 0
       firstFrame: 1
       lastFrame: 60
       wrapMode: 0
@@ -166,36 +347,254 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 1
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: Grenadier(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier
+      parentName: Grenadier(Clone)
+      position: {x: -0, y: 0, z: 0.08533767}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GrenadierSkeleton
+      parentName: Grenadier(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_Root
+      parentName: GrenadierSkeleton
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_Hips
+      parentName: Grenadier_Root
+      position: {x: 2.0376339e-33, y: 1.3305533, z: -0.10767474}
+      rotation: {x: -0.040366296, y: -0.040366296, z: -0.70595366, w: 0.70595366}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_Sphere
+      parentName: Grenadier_Hips
+      position: {x: -0.56634444, y: 1.1984685e-16, z: -1.8651746e-16}
+      rotation: {x: -0, y: -0.1278349, z: 0.0000000018626454, w: 0.9917955}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    - name: Grenadier_LeftHornArmor
+      parentName: Grenadier_Sphere
+      position: {x: -0.53789806, y: -0.46311915, z: 0.016111542}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    - name: Grenadier_LeftHornArmorEnd
+      parentName: Grenadier_LeftHornArmor
+      position: {x: -2.3070455, y: 1.4210854e-16, z: 5.32907e-16}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_LeftChestArmor
+      parentName: Grenadier_Sphere
+      position: {x: 0.105592914, y: -0.47423068, z: 0.54875475}
+      rotation: {x: -0.25439483, y: -0.5448172, z: 0.23770149, w: -0.7628601}
+      scale: {x: 1, y: 1.0000002, z: 1.0000002}
+    - name: Grenadier_LeftChestArmorEnd
+      parentName: Grenadier_LeftChestArmor
+      position: {x: -0.73499763, y: -5.684342e-16, z: -8.5265126e-16}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_EyeArmor
+      parentName: Grenadier_Sphere
+      position: {x: -0.43261176, y: 1.0153264e-16, z: 0.620056}
+      rotation: {x: 0.0000024456124, y: 0.707108, z: 0.0000024532467, w: 0.70710564}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Grenadier_EyeArmorEnd
+      parentName: Grenadier_EyeArmor
+      position: {x: -0.6230658, y: -6.310887e-32, z: -2.842171e-16}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_HelmetArmor
+      parentName: Grenadier_Sphere
+      position: {x: -0.8961326, y: 2.1245925e-16, z: 1.0234456}
+      rotation: {x: -0.000000131082, y: 0.38909128, z: 0.000000026433735, w: 0.9211992}
+      scale: {x: 1.0000004, y: 1.0000002, z: 1.0000004}
+    - name: Grenadier_HelmetArmorEnd
+      parentName: Grenadier_HelmetArmor
+      position: {x: -0.58135945, y: -1.5099033e-16, z: -5.684342e-16}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_RightShoulder
+      parentName: Grenadier_Sphere
+      position: {x: -0.13288295, y: 0.380554, z: 0.18700126}
+      rotation: {x: 0.81227744, y: 0.58327127, z: -0.0000013929057, w: -0.0000009983777}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Grenadier_RightUpperArm
+      parentName: Grenadier_RightShoulder
+      position: {x: 0.4968178, y: 0.00000251482, z: 3.7747583e-17}
+      rotation: {x: 0.000002313777, y: -0.0000028390718, z: -0.16193184, w: 0.986802}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Grenadier_RightArm
+      parentName: Grenadier_RightUpperArm
+      position: {x: 0.5718607, y: -0.0000000067134556, z: 0.00000007899927}
+      rotation: {x: 0.000000013171075, y: 0.00000709911, z: -9.635055e-12, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_RightHand
+      parentName: Grenadier_RightArm
+      position: {x: 0.38759333, y: 0.0000000011122782, z: 0.00000076637883}
+      rotation: {x: -0.0000027316428, y: -0.000004628251, z: -9.787344e-12, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_RightHandEnd
+      parentName: Grenadier_RightHand
+      position: {x: 0.32631, y: 5.684342e-16, z: -1.8056333e-12}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_RightThumb
+      parentName: Grenadier_RightHand
+      position: {x: 0.06874, y: 0.0897, z: 0.014770195}
+      rotation: {x: 0.000000024475867, y: 0.000000034916866, z: 0.44647673, w: 0.8947953}
+      scale: {x: 1, y: 1.0000001, z: 1.0000002}
+    - name: Grenadier_RightThumbEnd
+      parentName: Grenadier_RightThumb
+      position: {x: 0.15982021, y: 0.0000032948883, z: -3.4458645e-13}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_RightHornArmor
+      parentName: Grenadier_Sphere
+      position: {x: -0.53789353, y: 0.463119, z: 0.016111463}
+      rotation: {x: -0, y: 1, z: -0, w: 0}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000005}
+    - name: Grenadier_RightHornArmorEnd
+      parentName: Grenadier_RightHornArmor
+      position: {x: 2.30705, y: 4.2632563e-16, z: 0.0000000500953}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_RightChestArmor
+      parentName: Grenadier_Sphere
+      position: {x: 0.10558828, y: 0.47423097, z: 0.5487552}
+      rotation: {x: 0.23770152, y: -0.76286006, z: 0.2543949, w: 0.54481727}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_RightChestArmorEnd
+      parentName: Grenadier_RightChestArmor
+      position: {x: 0.7349946, y: -0.00000005638809, z: 0.0000015399401}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_LeftShoulder
+      parentName: Grenadier_Sphere
+      position: {x: -0.1328847, y: -0.38055408, z: 0.18700124}
+      rotation: {x: 0.0000013932585, y: 0.0000009983777, z: 0.81227744, w: 0.58327127}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_LeftUpperArm
+      parentName: Grenadier_LeftShoulder
+      position: {x: -0.49681723, y: -5.684342e-16, z: 4.8849813e-17}
+      rotation: {x: 0.0000008285151, y: -0.00000029174242, z: -0.16193208, w: 0.986802}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_LeftArm
+      parentName: Grenadier_LeftUpperArm
+      position: {x: -0.57200325, y: 0.00000036533623, z: -0.00000003189119}
+      rotation: {x: -0.0000006348368, y: 0.0000004820576, z: 0.0000011920926, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_LeftHand
+      parentName: Grenadier_LeftArm
+      position: {x: -0.3874504, y: 0.00000054646125, z: -0.00000002065975}
+      rotation: {x: -0.000004952255, y: -0.00000037404828, z: 0.0000003278225, w: 1}
+      scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    - name: Grenadier_LeftHandEnd
+      parentName: Grenadier_LeftHand
+      position: {x: -0.32630995, y: -0.0000005794685, z: -0.000000024959567}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_LeftThumb
+      parentName: Grenadier_LeftHand
+      position: {x: -0.06874115, y: -0.089706495, z: -0.0147702}
+      rotation: {x: -0.0000000015993462, y: -7.111395e-10, z: 0.44647664, w: 0.89479524}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Grenadier_LeftThumbEnd
+      parentName: Grenadier_LeftThumb
+      position: {x: -0.1598176, y: 0, z: -2.220446e-18}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_LeftUpperLeg
+      parentName: Grenadier_Hips
+      position: {x: 0.082454585, y: -0.4587256, z: 0.038890876}
+      rotation: {x: 0.05708636, y: -0.0000006463379, z: 0.9983693, w: -0.0000046740984}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_LeftLowerLeg
+      parentName: Grenadier_LeftUpperLeg
+      position: {x: -0.5828861, y: 0, z: 3.375078e-16}
+      rotation: {x: 0.0000013638424, y: -0.0000005438966, z: -0.000005905292, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    - name: Grenadier_LeftFoot
+      parentName: Grenadier_LeftLowerLeg
+      position: {x: -0.446891, y: 0.00000087675613, z: -0.000000037594745}
+      rotation: {x: -0.000017810042, y: 0.00000012664138, z: 0.0000029005932, w: 1}
+      scale: {x: 1.0000004, y: 1.0000005, z: 1}
+    - name: Grenadier_LeftFootEnd
+      parentName: Grenadier_LeftFoot
+      position: {x: -0.22686486, y: -0.000000034202543, z: 0.000000037590084}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Grenadier_RightUpperLeg
+      parentName: Grenadier_Hips
+      position: {x: 0.0824537, y: 0.458726, z: 0.03889098}
+      rotation: {x: -0.9983693, y: 0.0000051173906, z: 0.057086308, w: -0.0000003371388}
+      scale: {x: 1, y: 1, z: 1.0000002}
+    - name: Grenadier_RightLowerLeg
+      parentName: Grenadier_RightUpperLeg
+      position: {x: 0.582887, y: 0.0000001206743, z: 0.000000040075715}
+      rotation: {x: -0.0000011118151, y: 0.00000066683236, z: 0.0000067890433, w: -1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000005}
+    - name: Grenadier_RightFoot
+      parentName: Grenadier_RightLowerLeg
+      position: {x: 0.44689098, y: -0.00000060662194, z: -1.1877317e-11}
+      rotation: {x: -0.000048246162, y: -0.0000000038054395, z: -0.0000000234865, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000005}
+    - name: Grenadier_RightFootEnd
+      parentName: Grenadier_RightFoot
+      position: {x: 0.22686486, y: 0.00000018439604, z: -0.0000000015309362}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -203,23 +602,20 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: Grenadier_Root
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 887cc9cbcc10e8c45b6262198cc15ee6,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 887cc9cbcc10e8c45b6262198cc15ee6, type: 3}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 135217
-  packageName: 3D Game Kit - Character Pack
-  packageVersion: 1.0
-  assetPath: Assets/Animations/Character/Grenadier/@GrenadierTurnRight45.fbx
-  uploadId: 518974

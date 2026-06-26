@@ -35,6 +35,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float _jumpForce;
 
+    [SerializeField]
+    private float _rollSpeed;
+
+    [SerializeField]
+    private float _rollDuration;
+
+    private bool _isRolling;
+    private float _rollElapsedTime;
+    private Vector3 _rollDirection;
+
     private Vector3 _direction;
     private Vector2 _inputMovement;
 
@@ -54,6 +64,12 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private Transform _pistolGripTransform;
+
+    [SerializeField]
+    private GameObject _bulletPrefab;
+
+    [SerializeField]
+    private Transform _firePrefab;
 
     public enum WeaponType : byte
     {
@@ -116,6 +132,11 @@ public class PlayerController : MonoBehaviour
         _airDrag = 0.1f;
         _sprintSpeedMultiplier = 2f;
         _jumpForce = 5f;
+        _rollSpeed = 8f;
+        _rollDuration = 0.6f;
+        _isRolling = false;
+        _rollElapsedTime = 0.0f;
+        _rollDirection = Vector3.forward;
         _currentWeapon = WeaponType.Staff;
         
         _animator = GetComponentInChildren<Animator>();
@@ -229,6 +250,12 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (_isRolling)
+        {
+            MoveRolling();
+            return;
+        }
+
         float currentMoveSpeed = _moveSpeed * (_isRunningPressed ? _sprintSpeedMultiplier : 1f);
         Vector3 moveVector = Vector3.zero;
 
@@ -300,19 +327,103 @@ public class PlayerController : MonoBehaviour
 
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
+        if (_isRolling || !_controller.isGrounded)
+        {
+            return;
+        }
+
         _direction.y = _jumpForce;
     }
 
     private void OnRollPerformed(InputAction.CallbackContext context)
     {
+        if (_isRolling || !_controller.isGrounded)
+        {
+            return;
+        }
+
+        StartRoll();
+    }
+
+    private void StartRoll()
+    {
+        _isRolling = true;
+        _rollElapsedTime = 0.0f;
+        _rollDirection = GetCameraRelativeDirection();
+
+        if (_rollDirection.sqrMagnitude > 0.01f)
+        {
+            transform.rotation = Quaternion.LookRotation(_rollDirection);
+        }
+
         if (_animator != null && _rollTriggerHash != 0)
         {
             _animator.SetTrigger(_rollTriggerHash);
         }
     }
 
+    private void MoveRolling()
+    {
+        _rollElapsedTime += Time.fixedDeltaTime;
+
+        if (_controller.isGrounded && _direction.y < 0.0f)
+        {
+            _direction.y = -2.0f;
+        }
+
+        _direction.x = _rollDirection.x * _rollSpeed;
+        _direction.z = _rollDirection.z * _rollSpeed;
+        _direction += _gravityDirection.normalized * (_gravity * Time.fixedDeltaTime);
+        _controller.Move(_direction * Time.fixedDeltaTime);
+
+        if (_rollElapsedTime >= _rollDuration)
+        {
+            StopRoll();
+        }
+    }
+
+    private void StopRoll()
+    {
+        _isRolling = false;
+        _rollElapsedTime = 0.0f;
+        _direction.x = 0.0f;
+        _direction.z = 0.0f;
+    }
+
+    private Vector3 GetCameraRelativeDirection()
+    {
+        Vector3 forward = _cameraTransform != null ? _cameraTransform.forward : transform.forward;
+        Vector3 right = _cameraTransform != null ? _cameraTransform.right : transform.right;
+
+        forward.y = 0.0f;
+        right.y = 0.0f;
+        forward.Normalize();
+        right.Normalize();
+
+        const float threshold = 0.01f;
+        if (_inputMovement.sqrMagnitude > threshold)
+        {
+            return (forward * _inputMovement.y + right * _inputMovement.x).normalized;
+        }
+
+        return forward.sqrMagnitude > threshold ? forward : transform.forward;
+    }
+
     private void OnAttackPerformed(InputAction.CallbackContext context)
     {
+        if (_currentWeapon == WeaponType.Pistol)
+        {
+            if (_bulletPrefab != null && _firePrefab != null)
+            {
+                GameObject bullet = Instantiate(_bulletPrefab, _firePrefab.position, _firePrefab.rotation);
+                Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+                if (bulletRigidbody != null)
+                {
+                    bulletRigidbody.AddForce(_firePrefab.forward * 20f, ForceMode.Impulse);
+                }
+            }
+        }
+
         if (_animator != null)
         {
             if (_movingBoolHash != 0)
@@ -373,5 +484,7 @@ public class PlayerController : MonoBehaviour
         }
 
         weapon.transform.SetParent(weaponTransform, false);
+        weapon.transform.localPosition = Vector3.zero;
+        weapon.transform.localRotation = Quaternion.identity;
     }
 }

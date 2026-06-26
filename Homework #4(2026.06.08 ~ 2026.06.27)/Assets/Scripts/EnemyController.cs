@@ -110,9 +110,19 @@ public class EnemyController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _animator = _animator ?? GetComponentInChildren<Animator>();
 
-        ApplyDefaultValues();
-        ConfigureRigidbody();
-        ConfigureAnimator();
+        if (_rigidbody != null)
+        {
+            _rigidbody.constraints |= RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        }
+
+        if (_animator != null)
+        {
+            _animator.applyRootMotion = false;
+        }
+
+        _targetTag = !string.IsNullOrEmpty(_targetTag) ? _targetTag : "Player";
+        _movingBool = !string.IsNullOrEmpty(_movingBool) ? _movingBool : "Is Moving";
+        _moveSpeedFloat = !string.IsNullOrEmpty(_moveSpeedFloat) ? _moveSpeedFloat : "Move Speed";
 
         _movingBoolHash = GetAnimatorParameterHash(_movingBool);
         _moveSpeedFloatHash = GetAnimatorParameterHash(_moveSpeedFloat);
@@ -130,44 +140,6 @@ public class EnemyController : MonoBehaviour
         _lastAttackTime = -_attackCooldown;
         _attackEndTime = 0.0f;
         _moveSpeedParameter = 0.0f;
-    }
-
-    private void ApplyDefaultValues()
-    {
-        _targetTag = !string.IsNullOrEmpty(_targetTag) ? _targetTag : "Player";
-        _detectRadius = _detectRadius > 0.0f ? _detectRadius : 5.0f;
-
-        _walkSpeed = _walkSpeed > 0.0f ? _walkSpeed : 3.0f;
-        _runSpeed = _runSpeed > 0.0f ? _runSpeed : 6.0f;
-        _rotateSpeed = _rotateSpeed > 0.0f ? _rotateSpeed : 720.0f;
-        _targetReachDistance = _targetReachDistance > 0.0f ? _targetReachDistance : 0.2f;
-        _attackCooldown = _attackCooldown > 0.0f ? _attackCooldown : 1.0f;
-        _attackDuration = _attackDuration > 0.0f ? _attackDuration : 0.9f;
-        _maxMoveDeltaTime = _maxMoveDeltaTime > 0.0f ? _maxMoveDeltaTime : 0.05f;
-        _maxMoveDistancePerFrame = _maxMoveDistancePerFrame > 0.0f ? _maxMoveDistancePerFrame : 0.5f;
-
-        _moveDuration = _moveDuration > 0.0f ? _moveDuration : 2.0f;
-        _waitDuration = _waitDuration > 0.0f ? _waitDuration : 0.5f;
-
-        _movingBool = !string.IsNullOrEmpty(_movingBool) ? _movingBool : "Is Moving";
-        _moveSpeedFloat = !string.IsNullOrEmpty(_moveSpeedFloat) ? _moveSpeedFloat : "Move Speed";
-    }
-
-    private void ConfigureRigidbody()
-    {
-        if (_rigidbody != null)
-        {
-            _rigidbody.constraints |= RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-            _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-        }
-    }
-
-    private void ConfigureAnimator()
-    {
-        if (_animator != null)
-        {
-            _animator.applyRootMotion = false;
-        }
     }
 
     private void Start()

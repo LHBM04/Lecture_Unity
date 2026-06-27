@@ -24780,7 +24780,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!4 &495104041 stripped
 Transform:
@@ -110150,7 +110150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01577df73ce6f0141a731db48bb12e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationEvents
-  _controller: {fileID: 0}
+  _controller: {fileID: 1615015318}
 --- !u!23 &4421884297364629169
 MeshRenderer:
   m_ObjectHideFlags: 0

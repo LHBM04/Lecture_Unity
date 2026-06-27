@@ -4,8 +4,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    private PlayerInputActions _inputActions;
-
     [Header("Physics")]
     [SerializeField] 
     private CharacterController _controller;
@@ -37,13 +35,102 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float _rollSpeed;
+    private Vector3 _rollDirection;
 
     [SerializeField]
-    private float _rollDuration;
+    private float _rollTime;
+    private float _rollTimer;
 
     private bool _isRolling;
-    private float _rollElapsedTime;
-    private Vector3 _rollDirection;
+    public bool IsSpawned
+    {
+        get
+        {
+            return _isSpawned;
+        }
+        set
+        {
+            _isSpawned = value;
+        }
+    }
+
+    private bool _isSpawned;
+    public bool IsRolling
+    {
+        get
+        {
+            return _isRolling;
+        }
+        set
+        {
+            if (_isRolling == value)
+            {
+                return;
+            }
+
+            _isRolling = value;
+
+            if (!_isRolling)
+            {
+                ClearRollMovement();
+            }
+        }
+    }
+
+    private bool _isAttacking;
+    public bool IsAttacking
+    {
+        get
+        {
+            return _isAttacking;
+        }
+        set
+        {
+            _isAttacking = value;
+
+            if (_isAttacking)
+            {
+                _inputMovement = Vector2.zero;
+            }
+        }
+    }
+
+    private bool _isHurting;
+    public bool IsHurting
+    {
+        get
+        {
+            return _isHurting;
+        }
+        set
+        {
+            _isHurting = value;
+
+            if (_isHurting)
+            {
+                _inputMovement = Vector2.zero;
+            }
+        }
+    }
+
+    private bool _isDead;
+    public bool IsDead
+    {
+        get
+        {
+            return _isDead;
+        }
+        set
+        {
+            _isDead = value;
+
+            if (_isDead)
+            {
+                _inputMovement = Vector2.zero;
+                IsRolling = false;
+            }
+        }
+    }
 
     private Vector3 _direction;
     private Vector2 _inputMovement;
@@ -119,8 +206,7 @@ public class PlayerController : MonoBehaviour
     private string _attackTrigger;
     private int _attackTriggerHash;
 
-    [HideInInspector]
-    public bool isSpawned;
+    private PlayerInputActions _inputActions;
 
     private void Reset()
     {
@@ -133,10 +219,14 @@ public class PlayerController : MonoBehaviour
         _sprintSpeedMultiplier = 2f;
         _jumpForce = 5f;
         _rollSpeed = 8f;
-        _rollDuration = 0.6f;
+        _rollTime = 0.6f;
         _isRolling = false;
-        _rollElapsedTime = 0.0f;
+        _rollTimer = 0.0f;
         _rollDirection = Vector3.forward;
+        _isAttacking = false;
+        _isHurting = false;
+        _isDead = false;
+        _isSpawned = false;
         _currentWeapon = WeaponType.Staff;
         
         _animator = GetComponentInChildren<Animator>();
@@ -149,6 +239,10 @@ public class PlayerController : MonoBehaviour
         _controller = _controller ?? GetComponent<CharacterController>();
         
         _moveSpeedParameter = 0.0f;
+        _isAttacking = false;
+        _isHurting = false;
+        _isDead = false;
+        _isSpawned = false;
         _currentWeapon = WeaponType.Staff;
         
         _animator = _animator ?? GetComponentInChildren<Animator>();
@@ -214,7 +308,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (!isSpawned)
+        if (!IsSpawned || IsDead)
         {
             return;
         }
@@ -245,12 +339,12 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isSpawned)
+        if (!IsSpawned || IsDead)
         {
             return;
         }
 
-        if (_isRolling)
+        if (IsRolling)
         {
             MoveRolling();
             return;
@@ -292,7 +386,7 @@ public class PlayerController : MonoBehaviour
 
     public void Ready()
     {
-        isSpawned = true;
+        IsSpawned = true;
     }
 
     private void OnMoveStarted(InputAction.CallbackContext context)
@@ -327,7 +421,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
-        if (_isRolling || !_controller.isGrounded)
+        if (IsRolling || IsAttacking || IsHurting || IsDead || !_controller.isGrounded)
         {
             return;
         }
@@ -337,7 +431,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnRollPerformed(InputAction.CallbackContext context)
     {
-        if (_isRolling || !_controller.isGrounded)
+        if (IsRolling || IsAttacking || IsHurting || IsDead || !_controller.isGrounded)
         {
             return;
         }
@@ -347,8 +441,8 @@ public class PlayerController : MonoBehaviour
 
     private void StartRoll()
     {
-        _isRolling = true;
-        _rollElapsedTime = 0.0f;
+        IsRolling = true;
+        _rollTimer = 0.0f;
         _rollDirection = GetCameraRelativeDirection();
 
         if (_rollDirection.sqrMagnitude > 0.01f)
@@ -364,7 +458,7 @@ public class PlayerController : MonoBehaviour
 
     private void MoveRolling()
     {
-        _rollElapsedTime += Time.fixedDeltaTime;
+        _rollTimer += Time.fixedDeltaTime;
 
         if (_controller.isGrounded && _direction.y < 0.0f)
         {
@@ -376,16 +470,15 @@ public class PlayerController : MonoBehaviour
         _direction += _gravityDirection.normalized * (_gravity * Time.fixedDeltaTime);
         _controller.Move(_direction * Time.fixedDeltaTime);
 
-        if (_rollElapsedTime >= _rollDuration)
+        if (_rollTimer >= _rollTime)
         {
-            StopRoll();
+            IsRolling = false;
         }
     }
 
-    private void StopRoll()
+    private void ClearRollMovement()
     {
-        _isRolling = false;
-        _rollElapsedTime = 0.0f;
+        _rollTimer = 0.0f;
         _direction.x = 0.0f;
         _direction.z = 0.0f;
     }
@@ -411,6 +504,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttackPerformed(InputAction.CallbackContext context)
     {
+        if (IsRolling || IsAttacking || IsHurting || IsDead)
+        {
+            return;
+        }
+
         if (_currentWeapon == WeaponType.Pistol)
         {
             if (_bulletPrefab != null && _firePrefab != null)

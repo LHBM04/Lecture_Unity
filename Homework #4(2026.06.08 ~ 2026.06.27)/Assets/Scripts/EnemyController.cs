@@ -30,10 +30,7 @@ public class EnemyController : MonoBehaviour
     private float _targetReachDistance;
 
     [SerializeField]
-    private float _attackCooldown;
-
-    [SerializeField]
-    private float _attackDuration;
+    private float _attackCooldownTime;
 
     [SerializeField]
     private float _maxMoveDeltaTime;
@@ -45,22 +42,61 @@ public class EnemyController : MonoBehaviour
 
     [Header("Wander")]
     [SerializeField]
-    private float _moveDuration;
+    private float _moveTime;
 
     [SerializeField]
-    private float _waitDuration;
+    private float _waitTime;
 
     private Vector3 _moveDirection;
     private Vector3 _desiredMoveDirection;
     private float _desiredMoveSpeed;
     private bool _shouldMove;
-    private float _stateTimer;
+    private float _wanderTimer;
     private bool _isWaiting;
     private bool _isDead;
     private bool _shouldAttack;
     private bool _isAttacking;
     private float _lastAttackTime;
-    private float _attackEndTime;
+
+    public bool IsDead
+    {
+        get
+        {
+            return _isDead;
+        }
+        set
+        {
+            _isDead = value;
+
+            if (_isDead)
+            {
+                StopMoving();
+                SetMovementAnimation(false, 0.0f);
+            }
+        }
+    }
+
+    public bool IsAttacking
+    {
+        get
+        {
+            return _isAttacking;
+        }
+        set
+        {
+            _isAttacking = value;
+
+            if (_isAttacking)
+            {
+                StopMoving();
+                SetMovementAnimation(false, 0.0f);
+            }
+            else
+            {
+                _shouldAttack = false;
+            }
+        }
+    }
 
     [Header("Animation")]
     [SerializeField]
@@ -91,13 +127,12 @@ public class EnemyController : MonoBehaviour
         _runSpeed = 6.0f;
         _rotateSpeed = 720.0f;
         _targetReachDistance = 0.2f;
-        _attackCooldown = 1.0f;
-        _attackDuration = 0.9f;
+        _attackCooldownTime = 1.0f;
         _maxMoveDeltaTime = 0.05f;
         _maxMoveDistancePerFrame = 0.5f;
 
-        _moveDuration = 2.0f;
-        _waitDuration = 0.5f;
+        _moveTime = 2.0f;
+        _waitTime = 0.5f;
 
         _animator = GetComponentInChildren<Animator>();
         _movingBool = "Is Moving";
@@ -112,6 +147,9 @@ public class EnemyController : MonoBehaviour
 
         if (_rigidbody != null)
         {
+            _rigidbody.isKinematic = true;
+            _rigidbody.useGravity = false;
+            _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             _rigidbody.constraints |= RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
 
@@ -129,7 +167,7 @@ public class EnemyController : MonoBehaviour
         _attackTriggerHash = GetAnimatorParameterHash(_attackTrigger);
         _deadTriggerHash = GetAnimatorParameterHash(_deadTrigger);
 
-        _stateTimer = _moveDuration;
+        _wanderTimer = _moveTime;
         _desiredMoveDirection = Vector3.zero;
         _desiredMoveSpeed = 0.0f;
         _shouldMove = false;
@@ -137,8 +175,7 @@ public class EnemyController : MonoBehaviour
         _isDead = false;
         _shouldAttack = false;
         _isAttacking = false;
-        _lastAttackTime = -_attackCooldown;
-        _attackEndTime = 0.0f;
+        _lastAttackTime = -_attackCooldownTime;
         _moveSpeedParameter = 0.0f;
     }
 
@@ -149,21 +186,16 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        if (_isDead)
+        if (IsDead)
         {
             return;
-        }
-
-        if (_isAttacking && Time.time >= _attackEndTime)
-        {
-            AttackEnd();
         }
 
         UpdateTarget();
 
         if (_target != null)
         {
-            if (_isAttacking)
+            if (IsAttacking)
             {
                 FaceTarget();
                 SetMovementAnimation(false, 0.0f);
@@ -181,7 +213,7 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_isDead || !_shouldMove)
+        if (IsDead || !_shouldMove)
         {
             return;
         }
@@ -191,15 +223,14 @@ public class EnemyController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (_isDead)
+        if (IsDead)
         {
             return;
         }
 
         if (collision.collider.CompareTag("Weapon"))
         {
-            _isDead = true;
-            SetMovementAnimation(false, 0.0f);
+            IsDead = true;
 
             if (_animator != null && _deadTriggerHash != 0)
             {
@@ -283,17 +314,17 @@ public class EnemyController : MonoBehaviour
 
     private void Wander()
     {
-        _stateTimer -= Time.deltaTime;
+        _wanderTimer -= Time.deltaTime;
 
         if (_isWaiting)
         {
             SetMovementAnimation(false, 0.0f);
             StopMoving();
 
-            if (_stateTimer <= 0.0f)
+            if (_wanderTimer <= 0.0f)
             {
                 ChooseRandomDirection();
-                _stateTimer = _moveDuration;
+                _wanderTimer = _moveTime;
                 _isWaiting = false;
             }
 
@@ -303,9 +334,9 @@ public class EnemyController : MonoBehaviour
         SetMovementAnimation(true, 0.5f);
         StartMoving(_moveDirection, _walkSpeed);
 
-        if (_stateTimer <= 0.0f)
+        if (_wanderTimer <= 0.0f)
         {
-            _stateTimer = _waitDuration;
+            _wanderTimer = _waitTime;
             _isWaiting = true;
         }
     }
@@ -369,13 +400,11 @@ public class EnemyController : MonoBehaviour
 
         if (_rigidbody != null)
         {
-            _rigidbody.MovePosition(nextPosition);
-            _rigidbody.MoveRotation(nextRotation);
+            _rigidbody.Move(nextPosition, nextRotation);
             return;
         }
 
-        transform.position = nextPosition;
-        transform.rotation = nextRotation;
+        transform.SetPositionAndRotation(nextPosition, nextRotation);
     }
 
     private void FaceTarget()
@@ -428,14 +457,12 @@ public class EnemyController : MonoBehaviour
 
     private void TryAttack()
     {
-        if (!_shouldAttack || _isAttacking || Time.time < _lastAttackTime + _attackCooldown)
+        if (!_shouldAttack || IsAttacking || Time.time < _lastAttackTime + _attackCooldownTime)
         {
             return;
         }
 
-        _isAttacking = true;
         _lastAttackTime = Time.time;
-        _attackEndTime = Time.time + _attackDuration;
 
         if (_animator == null || _attackTriggerHash == 0)
         {
@@ -449,14 +476,12 @@ public class EnemyController : MonoBehaviour
 
     public void AttackBegin()
     {
-        _isAttacking = true;
-        SetMovementAnimation(false, 0.0f);
+        IsAttacking = true;
     }
 
     public void AttackEnd()
     {
-        _isAttacking = false;
-        _shouldAttack = false;
+        IsAttacking = false;
     }
 
     private int GetAnimatorParameterHash(string parameterName)

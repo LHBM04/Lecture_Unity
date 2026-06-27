@@ -871,7 +871,7 @@ GameObject:
   - component: {fileID: 2788800953346945979}
   m_Layer: 0
   m_Name: Grenadier
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -936,8 +936,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _detectRadius: 5
-  _walkSpeed: 3
-  _runSpeed: 6
+  _walkSpeed: 1
+  _runSpeed: 3
   _rotateSpeed: 720
   _targetReachDistance: 0.2
   _attackCooldownTime: 1

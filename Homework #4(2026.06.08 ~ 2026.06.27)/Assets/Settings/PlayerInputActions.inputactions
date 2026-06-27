@@ -77,6 +77,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Restart",
+                    "type": "Button",
+                    "id": "b5b638bb-803d-4653-b584-56dff34605cd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -214,17 +223,6 @@
                 },
                 {
                     "name": "",
-                    "id": "3ef1e13a-94d0-428b-8024-aa50b5880dce",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard & Mouse",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "0b608ad9-465e-4c4e-a47e-2dae9a741b81",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -264,6 +262,17 @@
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
                     "action": "Spawn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74e82637-d4a6-4260-8709-17acf3140226",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Restart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -274,7 +275,9 @@ public class PlayerController : MonoBehaviour
         _inputActions.Player.Roll.performed += OnRollPerformed;
         _inputActions.Player.Attack.performed += OnAttackPerformed;
         _inputActions.Player.Scroll.performed += OnScrollPerformed;
-        
+
+        _inputActions.Player.Restart.performed += OnRestartPerformed;
+
         _inputActions.Player.Enable();
     }
 
@@ -303,6 +306,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
@@ -382,6 +386,23 @@ public class PlayerController : MonoBehaviour
 
         _direction += _gravityDirection.normalized * (_gravity * Time.fixedDeltaTime);
         _controller.Move(_direction * Time.fixedDeltaTime);
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (_isDead)
+        {
+            return;
+        }
+
+        if (hit.collider.CompareTag("Enemy"))
+        {
+            _isDead = true;
+            if (_animator != null && _deadTriggerHash != 0)
+            {
+                _animator.SetTrigger(_deadTriggerHash);
+            }
+        }
     }
 
     public void Ready()
@@ -504,7 +525,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttackPerformed(InputAction.CallbackContext context)
     {
-        if (IsRolling || IsAttacking || IsHurting || IsDead)
+        if (!CanUseWeapon())
         {
             return;
         }
@@ -537,6 +558,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnScrollPerformed(InputAction.CallbackContext context)
     {
+        if (!CanUseWeapon())
+        {
+            return;
+        }
+
         float scrollDelta = context.ReadValue<Vector2>().y;
 
         if (Mathf.Approximately(scrollDelta, 0.0f))
@@ -546,6 +572,16 @@ public class PlayerController : MonoBehaviour
 
         WeaponType nextWeapon = _currentWeapon == WeaponType.Staff ? WeaponType.Pistol : WeaponType.Staff;
         SetWeapon(nextWeapon);
+    }
+
+    private bool CanUseWeapon()
+    {
+        return IsSpawned && _controller.isGrounded && !IsMoving() && !IsRolling && !IsAttacking && !IsHurting && !IsDead;
+    }
+
+    private bool IsMoving()
+    {
+        return _inputMovement.sqrMagnitude > 0.01f;
     }
 
     private void SetWeapon(WeaponType weaponType)
@@ -584,5 +620,10 @@ public class PlayerController : MonoBehaviour
         weapon.transform.SetParent(weaponTransform, false);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
+    }
+
+    private void OnRestartPerformed(InputAction.CallbackContext context)
+    {
+        SceneManager.LoadScene("Game");
     }
 }

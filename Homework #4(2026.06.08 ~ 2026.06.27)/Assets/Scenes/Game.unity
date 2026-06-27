@@ -80123,7 +80123,6 @@ MonoBehaviour:
   - {fileID: 5438166731392459118, guid: 7fc4837aa0502bf4fbb9bb3e8dacbe33, type: 3}
   _spawnRadius: 20
   _minSpawnDistance: 5
-  _spawnTime: 1
 --- !u!1001 &1615050235
 PrefabInstance:
   m_ObjectHideFlags: 0
